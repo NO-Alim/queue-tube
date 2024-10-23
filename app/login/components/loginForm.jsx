@@ -1,5 +1,6 @@
 "use client";
 import { loginUser } from "@/actions/auth/authActions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,14 +14,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export function LoginForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   //
   async function onSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
       const response = await loginUser(formData);
@@ -32,6 +36,8 @@ export function LoginForm() {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false); // Set isLoading to false after the API call completes
     }
   }
   return (
@@ -71,8 +77,9 @@ export function LoginForm() {
               variant="destructive"
               type="submit"
               className="w-full font-bold"
+              disabled={loading}
             >
-              Login
+              {loading ? <LoadingSpinner /> : "Login"}
             </Button>
           </div>
         </form>
