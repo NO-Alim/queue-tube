@@ -1,5 +1,5 @@
 "use client";
-import { loginUser, singUpUser } from "@/actions/auth/authActions";
+import { singUpUser } from "@/actions/auth/authActions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,14 +29,15 @@ export function RegisterForm() {
       const response = await singUpUser(formData);
 
       // now login
-      const loginResponse = await loginUser(formData);
-      if (!!loginResponse.error) {
-        toast.error(error?.message || "something went wrong.");
-        router.push("/login");
-      } else {
-        toast.success(`Welcome ${response.firstName} ${response.lastName}.`);
-        router.push("/");
-      }
+      // const loginResponse = await loginUser(formData);
+      // if (!!loginResponse.error) {
+      //   toast.error(error?.message || "something went wrong.");
+      //   router.push("/login");
+      // } else {
+      //   toast.success(`Welcome ${response.firstName} ${response.lastName}.`);
+      //   router.push("/");
+      // }
+      router.push("/");
     } catch (error) {
       toast.error(error.message);
     } finally {
