@@ -36,6 +36,26 @@ export const singUpUser = async (formData) => {
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
 
+  // Field validation
+  if (!firstName || firstName.trim() === "") {
+    throw new Error("First name is required.");
+  }
+
+  if (!lastName || lastName.trim() === "") {
+    throw new Error("Last name is required.");
+  }
+
+  if (!email || email.trim() === "") {
+    throw new Error("Email is required.");
+  }
+
+  if (!password || password.trim() === "") {
+    throw new Error("Password is required.");
+  }
+
+  if (!confirmPassword || confirmPassword.trim() === "") {
+    throw new Error("Confirm Password is required.");
+  }
   // password validation
   if (password !== confirmPassword) {
     throw new Error("Password and Confirm Password not Match.");

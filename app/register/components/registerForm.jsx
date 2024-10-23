@@ -1,5 +1,6 @@
 "use client";
 import { loginUser, singUpUser } from "@/actions/auth/authActions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,13 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export function RegisterForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
       const response = await singUpUser(formData);
@@ -35,6 +39,8 @@ export function RegisterForm() {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -101,11 +107,12 @@ export function RegisterForm() {
               </div>
             </div>
             <Button
+              disabled={loading}
               variant="destructive"
               type="submit"
               className="w-full font-bold"
             >
-              Register
+              {loading ? <LoadingSpinner /> : "Register"}
             </Button>
           </div>
         </form>
