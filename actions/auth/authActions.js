@@ -71,21 +71,18 @@ export const singUpUser = async (formData) => {
       throw new Error(`User Already Exist with This Email`);
     }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
-      }
-    );
+    const response = await fetch(`https://queue-tube.vercel.app/api/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+      }),
+    });
     const resObj = await response.json();
     if (response?.status === 201) {
       return resObj;
