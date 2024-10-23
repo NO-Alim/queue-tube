@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { User } from "@/model/user_model";
+import { dbConnect } from "@/service/mongo";
 import { AuthError } from "next-auth";
 
 export const loginUser = async (formData) => {
@@ -9,6 +10,7 @@ export const loginUser = async (formData) => {
   const password = formData.get("password");
 
   try {
+    await dbConnect();
     const res = await signIn("credentials", {
       email,
       password,
@@ -62,24 +64,28 @@ export const singUpUser = async (formData) => {
   }
 
   try {
+    await dbConnect();
     // if email already used
     const userExist = await User.findOne({ email });
     if (userExist) {
       throw new Error(`User Already Exist with This Email`);
     }
 
-    const response = await fetch("http://localhost:3000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+        }),
+      }
+    );
     const resObj = await response.json();
     if (response?.status === 201) {
       return resObj;
