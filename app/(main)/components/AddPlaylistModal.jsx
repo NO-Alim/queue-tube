@@ -33,6 +33,7 @@ export function AddPlaylistModal() {
       setLoading(false);
       return;
     }
+
     try {
       const playlistDetails = await getPlaylist(playlistId);
       setPlaylistData(playlistDetails);

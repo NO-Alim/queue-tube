@@ -26,8 +26,8 @@ export function RegisterForm() {
     setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
-      const response = await singUpUser(formData);
-
+      // register
+      await singUpUser(formData);
       // now login
       const loginResponse = await loginUser(formData);
       if (!!loginResponse.error) {

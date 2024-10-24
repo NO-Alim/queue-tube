@@ -9,7 +9,7 @@ const Logo = ({ className = "" }) => {
   return (
     <div>
       <Image
-        className={cn("max-w-[150px]", className)}
+        className={cn(" max-w-[100px] md:max-w-[150px]", className)}
         src={theme === "dark" ? "/logo_white.png" : "/logo_black.png"}
         alt="queue tube"
         width={150}
