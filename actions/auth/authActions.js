@@ -1,7 +1,6 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { User } from "@/model/user_model";
 import { dbConnect } from "@/service/mongo";
 import { AuthError } from "next-auth";
 
@@ -64,34 +63,36 @@ export const singUpUser = async (formData) => {
   }
 
   try {
-    await dbConnect();
+    return " testing a production error!!!";
+    //throw new Error("testing error for production.");
+    // await dbConnect();
     // if email already used
-    const userExist = await User.findOne({ email });
-    if (userExist) {
-      throw new Error(`User Already Exist with This Email`);
-    }
+    // const userExist = await User.findOne({ email });
+    // if (userExist) {
+    //   throw new Error(`User Already Exist with This Email`);
+    // }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
-      }
-    );
-    const resObj = await response.json();
-    if (response?.status === 201) {
-      return resObj;
-    } else {
-      throw new Error(resObj?.error || "Internal Server Error");
-    }
+    // const response = await fetch(
+    //   `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/register`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       firstName,
+    //       lastName,
+    //       email,
+    //       password,
+    //     }),
+    //   }
+    // );
+    // const resObj = await response.json();
+    // if (response?.status === 201) {
+    //   return resObj;
+    // } else {
+    //   throw new Error(resObj?.error || "Internal Server Error");
+    // }
   } catch (error) {
     throw new Error(error?.message || "Internal Server Error");
   }
