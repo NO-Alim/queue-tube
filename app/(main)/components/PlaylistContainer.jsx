@@ -1,8 +1,10 @@
+import PlaylistCardSkeleton from "@/components/PlaylistCardSkeleton";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import PlaylistCard from "./PlaylistCard";
 
-const PlaylistContainer = () => {
+const PlaylistContainer = async ({ playlists }) => {
   return (
     <div className=" space-y-5">
       <div className="flex justify-between items-center">
@@ -15,10 +17,11 @@ const PlaylistContainer = () => {
         </Link>
       </div>
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
-        <PlaylistCard />
+        {playlists.map((item) => (
+          <Suspense fallback={<PlaylistCardSkeleton />} key={item._id}>
+            <PlaylistCard playlistId={item.playlist_id} />
+          </Suspense>
+        ))}
       </div>
     </div>
   );

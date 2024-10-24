@@ -1,5 +1,5 @@
 "use client";
-import { getPlaylist } from "@/actions/playlistActions/playlistActions";
+import { getPlaylistDetails } from "@/actions/playlistActions/playlistActions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +35,7 @@ export function AddPlaylistModal() {
     }
 
     try {
-      const playlistDetails = await getPlaylist(playlistId);
+      const playlistDetails = await getPlaylistDetails(playlistId);
       setPlaylistData(playlistDetails);
     } catch (error) {
       setPlaylistData(null);

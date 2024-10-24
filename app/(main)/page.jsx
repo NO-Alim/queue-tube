@@ -1,4 +1,6 @@
 import { auth } from "@/auth";
+import { getPlaylistByUserId } from "@/queries/playlist";
+import { getUserByEmail } from "@/queries/user";
 import Link from "next/link";
 import { AddPlaylistModal } from "./components/AddPlaylistModal";
 import PlaylistContainer from "./components/PlaylistContainer";
@@ -10,6 +12,13 @@ const HomePage = async () => {
 
   if (!session?.user) {
     return <UnauthorizedHome />;
+  }
+
+  const loggedInUser = await getUserByEmail(session?.user?.email);
+  const playlists = await getPlaylistByUserId(loggedInUser?._id);
+
+  if (!playlists || playlists?.length === 0) {
+    return <UnauthorizedHome authorizedHome={true} />;
   }
 
   return (
@@ -31,7 +40,7 @@ const HomePage = async () => {
             </div>
           </div>
         </div>
-        <PlaylistContainer />
+        <PlaylistContainer playlists={playlists} />
       </div>
     </div>
   );

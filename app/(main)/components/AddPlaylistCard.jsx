@@ -1,9 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { addPlaylistAction } from "@/actions/playlistActions/playlistActions";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { ArrowLeft, VideoIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { toast } from "sonner";
 
 const AddPlaylistCard = ({ playlistDetails, resetPlaylistData }) => {
   const {
@@ -15,7 +19,16 @@ const AddPlaylistCard = ({ playlistDetails, resetPlaylistData }) => {
     channelId,
     channelTitle,
     itemCount,
+    playlistExistInDB,
   } = playlistDetails || {};
+
+  const handleClick = async () => {
+    try {
+      await addPlaylistAction(id);
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong in server side.");
+    }
+  };
 
   return (
     <>
@@ -49,9 +62,21 @@ const AddPlaylistCard = ({ playlistDetails, resetPlaylistData }) => {
           </div>
         </div>
       </div>
-      <Button className="w-full" variant="destructive">
-        Add Playlist
-      </Button>
+      {playlistExistInDB ? (
+        <Link
+          href="#"
+          className={cn(
+            buttonVariants({ size: "sm", variant: "destructive" }),
+            "px-4 font-bold"
+          )}
+        >
+          Play Now
+        </Link>
+      ) : (
+        <Button className="w-full" variant="destructive" onClick={handleClick}>
+          Add Playlist
+        </Button>
+      )}
     </>
   );
 };
