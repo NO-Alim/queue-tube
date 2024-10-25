@@ -1,6 +1,6 @@
 "use client";
 
-import { testAction } from "@/actions/playlistActions/test";
+import { getPlaylistDetails } from "@/actions/playlistActions/playlistActions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,40 +22,32 @@ export function AddPlaylistModal() {
   const [loading, setLoading] = useState(false);
   const [playlistData, setPlaylistData] = useState(null);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   const formData = new FormData(e.currentTarget);
-  //   const playlistId = formData.get("playlistId");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const playlistId = formData.get("playlistId");
 
-  //   // empty input
-  //   if (!playlistId) {
-  //     toast.error("Please enter a valid playlist ID.");
-  //     setLoading(false);
-  //     return;
-  //   }
+    // empty input
+    if (!playlistId) {
+      toast.error("Please enter a valid playlist ID.");
+      setLoading(false);
+      return;
+    }
 
-  //   try {
-  //     const playlistDetails = await getPlaylistDetails(playlistId);
-  //     setPlaylistData(playlistDetails);
-  //   } catch (error) {
-  //     setPlaylistData(null);
-  //     toast.error(error?.message || "Something went wrong!");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+    try {
+      const playlistDetails = await getPlaylistDetails(playlistId);
+      setPlaylistData(playlistDetails);
+    } catch (error) {
+      setPlaylistData(null);
+      toast.error(error?.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const resetPlaylistData = () => {
     setPlaylistData(null);
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await testAction();
-    } catch (error) {
-      toast.error(error?.message || "Something went wrong!");
-    }
   };
 
   return (
