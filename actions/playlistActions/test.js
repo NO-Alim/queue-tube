@@ -1,5 +1,9 @@
 "use server";
 
 export const testAction = async () => {
-  throw new Error("Error from test action!");
+  try {
+    throw new Error("Error from test action!");
+  } catch (error) {
+    return { error: error.message };
+  }
 };
