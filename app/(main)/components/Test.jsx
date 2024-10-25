@@ -7,6 +7,9 @@ const Test = () => {
   const handleClick = async () => {
     try {
       const res = await testAction();
+      if (res.error) {
+        throw new Error(res.error);
+      }
     } catch (error) {
       toast.error(error.message);
     }
