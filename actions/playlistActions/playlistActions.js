@@ -8,7 +8,6 @@ import filterIdFromLink from "@/utils/filterIdFromLink";
 export async function getPlaylistDetails(playlistIdOrLink) {
   try {
     const playlistId = filterIdFromLink(playlistIdOrLink);
-
     // for check playlist exist or not
     const session = await auth();
     const loggedInUser = await getUserByEmail(session?.user?.email);
