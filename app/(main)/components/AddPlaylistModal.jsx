@@ -1,6 +1,5 @@
 "use client";
 
-import { getPlaylistDetails } from "@/actions/playlistActions/playlistActions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,11 +35,26 @@ export function AddPlaylistModal() {
     }
 
     try {
-      const playlistDetails = await getPlaylistDetails(playlistId);
-      setPlaylistData(playlistDetails);
+      // Fetch using GET request with query params
+      const response = await fetch(
+        `/api/playlist/youtube?playlistIdOrLink=${encodeURIComponent(
+          playlistId
+        )}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch playlist.");
+      }
+
+      const playlistDetails = await response.json();
+      setPlaylistData(playlistDetails.data); // Access the 'data' field
     } catch (error) {
       setPlaylistData(null);
-      toast.error(error?.message || "Something went wrong!");
+      toast.error(error.message || "Something went wrong!");
     } finally {
       setLoading(false);
     }

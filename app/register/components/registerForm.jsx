@@ -18,31 +18,32 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export function RegisterForm() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function onSubmit(e) {
     e.preventDefault();
     setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
-      // register
-      await singUpUser(formData);
-      // now login
-      const loginResponse = await loginUser(formData);
-      if (!!loginResponse.error) {
-        toast.error(error?.message || "something went wrong.");
-        router.push("/login");
+      const response = await singUpUser(formData);
+
+      if (response.error) {
+        toast.error(response.error); // Display the error message
       } else {
-        toast.success(`Welcome ${response.firstName} ${response.lastName}.`);
-        router.push("/");
+        await loginUser(formData);
+        toast.success(
+          `Welcome ${response.user.firstName} ${response.user.lastName}.`
+        );
+        router.push("/"); // Redirect to home or another page
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Something went wrong!"); // Handle unexpected errors
     } finally {
       setLoading(false);
     }
   }
+
   return (
     <Card className="w-[350px] pb-5">
       <CardHeader>

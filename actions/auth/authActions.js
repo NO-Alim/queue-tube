@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { User } from "@/model/user_model";
 import { dbConnect } from "@/service/mongo";
 import { AuthError } from "next-auth";
 
@@ -39,37 +40,39 @@ export const singUpUser = async (formData) => {
 
   // Field validation
   if (!firstName || firstName.trim() === "") {
-    throw new Error("First name is required.");
+    return { error: "First name is required." };
   }
 
   if (!lastName || lastName.trim() === "") {
-    throw new Error("Last name is required.");
+    return { error: "Last name is required." };
   }
 
   if (!email || email.trim() === "") {
-    throw new Error("Email is required.");
+    return { error: "Email is required." };
   }
 
   if (!password || password.trim() === "") {
-    throw new Error("Password is required.");
+    return { error: "Password is required." };
   }
 
   if (!confirmPassword || confirmPassword.trim() === "") {
-    throw new Error("Confirm Password is required.");
+    return { error: "Confirm Password is required." };
   }
-  // password validation
+
+  // Password validation
   if (password !== confirmPassword) {
-    throw new Error("Password and Confirm Password not Match.");
+    return { error: "Password and Confirm Password do not match." };
   }
 
   try {
+    // check the user already has Using this email
     await dbConnect();
     //if email already used
     const userExist = await User.findOne({ email });
     if (userExist) {
       throw new Error(`User Already Exist with This Email`);
     }
-
+    // Register user via API
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/register`,
       {
@@ -85,13 +88,14 @@ export const singUpUser = async (formData) => {
         }),
       }
     );
+
     const resObj = await response.json();
-    if (response?.status === 201) {
-      return;
+    if (response.status === 201) {
+      return { success: true, user: resObj }; // Return success and user data
     } else {
-      throw new Error(resObj?.error || "Internal Server Error");
+      return { error: resObj?.error || "Internal Server Error" }; // Return error message
     }
   } catch (error) {
-    throw new Error(error?.message || "Internal Server Error");
+    return { error: error.message || "Internal Server Error" }; // Return error message
   }
 };

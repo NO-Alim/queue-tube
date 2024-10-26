@@ -8,6 +8,7 @@ import Link from "next/link";
 
 const PlaylistCard = async ({ playlistId }) => {
   const playlistDetails = await getPlaylistDetails(playlistId);
+
   const {
     id,
     title,

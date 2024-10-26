@@ -3,14 +3,12 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import PlaylistCard from "./PlaylistCard";
-import Test from "./Test";
 
 const PlaylistContainer = async ({ playlists }) => {
   return (
     <div className=" space-y-5">
       <div className="flex justify-between items-center">
         <h1 className=" text-2xl">Your Lists</h1>
-        <Test />
         <Link
           href={""}
           className=" text-sm font-medium  hover:text-red-600 flex items-center gap-1"
