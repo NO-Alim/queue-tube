@@ -1,15 +1,20 @@
 "use client";
 
 import { addPlaylistAction } from "@/actions/playlistActions/playlistActions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
-
-const AddPlaylistCard = ({ playlistDetails, resetPlaylistData }) => {
+const AddPlaylistCard = ({
+  playlistDetails,
+  resetPlaylistData,
+  modalHandler,
+}) => {
   const {
     id,
     title,
@@ -21,12 +26,24 @@ const AddPlaylistCard = ({ playlistDetails, resetPlaylistData }) => {
     itemCount,
     playlistExistInDB,
   } = playlistDetails || {};
+  const [loading, setLoading] = useState(false);
+
+  if (!id) return;
 
   const handleClick = async () => {
+    setLoading(true);
     try {
-      await addPlaylistAction(id);
+      const response = await addPlaylistAction(id);
+      if (response?.error) {
+        toast.error(response.error.message);
+      } else {
+        toast.success("Playlist added Successfully.");
+      }
     } catch (error) {
       toast.error(error?.message || "Something went wrong in server side.");
+    } finally {
+      setLoading(false);
+      modalHandler();
     }
   };
 
@@ -73,8 +90,13 @@ const AddPlaylistCard = ({ playlistDetails, resetPlaylistData }) => {
           Play Now
         </Link>
       ) : (
-        <Button className="w-full" variant="destructive" onClick={handleClick}>
-          Add Playlist
+        <Button
+          className="w-full"
+          variant="destructive"
+          onClick={handleClick}
+          disabled={loading}
+        >
+          {loading ? <LoadingSpinner /> : "Add Playlist"}
         </Button>
       )}
     </>

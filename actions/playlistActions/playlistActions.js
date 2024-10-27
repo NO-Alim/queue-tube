@@ -1,16 +1,18 @@
 "use server";
 
 import { auth } from "@/auth";
-import { addPlaylist, checkPlaylistExist } from "@/queries/playlist";
-import { getUserByEmail } from "@/queries/user";
+import { getLoggedInUser } from "@/lib/loggedInUser";
+import { checkPlaylistExist } from "@/queries/playlist";
 import filterIdFromLink from "@/utils/filterIdFromLink";
+import { revalidateTag } from "next/cache";
 
-export async function getPlaylistDetails(playlistIdOrLink) {
+// form youtube api
+export const getPlaylistDetails = async (playlistIdOrLink) => {
   try {
     const playlistId = filterIdFromLink(playlistIdOrLink);
     // for check playlist exist or not
     const session = await auth();
-    const loggedInUser = await getUserByEmail(session?.user?.email);
+    const loggedInUser = await getLoggedInUser();
     const playlistAlreadyExist = await checkPlaylistExist(
       playlistId,
       loggedInUser._id
@@ -47,26 +49,82 @@ export async function getPlaylistDetails(playlistIdOrLink) {
   } catch (error) {
     throw new Error(error?.message || "Something went wrong.");
   }
-}
+};
 
 export const addPlaylistAction = async (playlistId) => {
   try {
-    // for checking playlist id is valid
+    const loggedInUser = await getLoggedInUser();
+    if (!loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+    //check playlist id valid or not
+    // if in valid error will throw getPlaylistDetails function
     await getPlaylistDetails(playlistId);
-    //
-    const session = await auth();
-    const loggedInUser = await getUserByEmail(session.user.email);
-    const playlistAlreadyExist = await checkPlaylistExist(
-      playlistId,
-      loggedInUser._id
+
+    //fetch
+    const userId = loggedInUser._id;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ playlistId, userId }),
+      }
     );
-    if (playlistAlreadyExist) {
-      throw new Error("Playlist Already Exist");
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to add playlist.");
     }
 
-    const addedPlaylist = await addPlaylist(playlistId, loggedInUser._id);
+    revalidateTag("user-playlists");
     return;
   } catch (error) {
-    throw new Error(error);
+    return {
+      error: error.message,
+    };
+  }
+};
+
+export const getPlaylistsAction = async ({
+  title,
+  limit = 5,
+  page = 1,
+  sort,
+} = {}) => {
+  try {
+    const loggedInUser = await getLoggedInUser();
+    if (!loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+    // Build the query parameters
+
+    const params = new URLSearchParams();
+    params.append("userId", loggedInUser?._id);
+    if (title) params.append("title", title);
+    params.append("limit", limit);
+    params.append("page", page);
+    if (sort) params.append("sort", sort);
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
+      }/api/playlist/local?${params.toString()}`,
+      {
+        next: { tags: ["user-playlists"] },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch playlists.");
+    }
+
+    return await response.json();
+  } catch (error) {
+    return {
+      error: error.message,
+    };
   }
 };

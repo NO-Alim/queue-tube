@@ -19,6 +19,7 @@ import AddPlaylistCard from "./AddPlaylistCard";
 
 export function AddPlaylistModal() {
   const [loading, setLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [playlistData, setPlaylistData] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -60,12 +61,17 @@ export function AddPlaylistModal() {
     }
   };
 
+  const modalHandler = () => {
+    setDialogOpen(!dialogOpen);
+    setPlaylistData(null);
+  };
+
   const resetPlaylistData = () => {
     setPlaylistData(null);
   };
 
   return (
-    <Dialog onOpenChange={resetPlaylistData}>
+    <Dialog open={dialogOpen} onOpenChange={modalHandler}>
       <DialogTrigger asChild>
         <Button variant="destructive" className=" font-semibold">
           Add Playlist
@@ -76,6 +82,7 @@ export function AddPlaylistModal() {
           <AddPlaylistCard
             playlistDetails={playlistData}
             resetPlaylistData={resetPlaylistData}
+            modalHandler={modalHandler}
           />
         ) : (
           <>
