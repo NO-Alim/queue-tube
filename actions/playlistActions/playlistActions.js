@@ -108,8 +108,7 @@ export const getPlaylistsAction = async ({
     if (sort) params.append("sort", sort);
     const url = `${
       process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
-    }${params.toString()}`;
-
+    }/api/playlist/local?${params.toString()}`;
     const response = await fetch(url, {
       next: { tags: ["user-playlists"] },
     });
