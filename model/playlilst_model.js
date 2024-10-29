@@ -12,8 +12,5 @@ const playlistSchema = new Schema({
   },
 });
 
-// compound index to enforce unique playlist_id per user
-playlistSchema.index({ user: 1, playlist_id: 1 }, { unique: true });
-
 export const Playlist =
   mongoose.models.Playlist || mongoose.model("Playlist", playlistSchema);

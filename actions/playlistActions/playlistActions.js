@@ -81,6 +81,8 @@ export const addPlaylistAction = async (playlistId) => {
     revalidateTag("user-playlists");
     return;
   } catch (error) {
+    console.log(error);
+
     return {
       error: error.message,
     };
