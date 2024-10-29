@@ -12,6 +12,7 @@ const playlistSchema = new Schema({
   },
 });
 
+// Compound index to enforce unique playlist_id per user
 playlistSchema.index({ user: 1, playlist_id: 1 }, { unique: true });
 
 playlistSchema.post("save", function (error, doc, next) {

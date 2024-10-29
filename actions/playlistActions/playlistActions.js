@@ -119,6 +119,8 @@ export const getPlaylistsAction = async ({
 
     return await response.json();
   } catch (error) {
+    console.log(error);
+
     return {
       error: error.message,
     };
