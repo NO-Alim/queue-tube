@@ -13,9 +13,8 @@ const HomePage = async () => {
   }
 
   const playlists = await getPlaylistsAction();
-
   if (playlists?.error) {
-    return <h1>{playlists.error?.message}</h1>;
+    return <h1 className=" text-lg text-red-600">{playlists.error}</h1>;
   }
 
   if (!playlists || playlists?.length === 0) {

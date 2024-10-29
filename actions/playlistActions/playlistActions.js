@@ -63,16 +63,15 @@ export const addPlaylistAction = async (playlistId) => {
 
     //fetch
     const userId = loggedInUser._id;
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ playlistId, userId }),
-      }
-    );
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ playlistId, userId }),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -107,14 +106,13 @@ export const getPlaylistsAction = async ({
     params.append("limit", limit);
     params.append("page", page);
     if (sort) params.append("sort", sort);
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
-      }/api/playlist/local?${params.toString()}`,
-      {
-        next: { tags: ["user-playlists"] },
-      }
-    );
+    const url = `${
+      process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
+    }${params.toString()}`;
+
+    const response = await fetch(url, {
+      next: { tags: ["user-playlists"] },
+    });
 
     if (!response.ok) {
       const errorData = await response.json();

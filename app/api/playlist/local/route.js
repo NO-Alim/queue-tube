@@ -75,6 +75,7 @@ export const POST = async (request) => {
       status: 201,
     });
   } catch (error) {
+    console.log(error);
     return new NextResponse(error?.message || "Server Error", {
       status: 500,
     });

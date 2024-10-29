@@ -35,12 +35,12 @@ const AddPlaylistCard = ({
     try {
       const response = await addPlaylistAction(id);
       if (response?.error) {
-        toast.error(response.error.message);
+        toast.error(response.error?.message || "Failed to add playlist.");
       } else {
         toast.success("Playlist added Successfully.");
       }
     } catch (error) {
-      toast.error(error?.message || "Something went wrong in server side.");
+      toast.error(error?.message || "Failed to add playlist.");
     } finally {
       setLoading(false);
       modalHandler();

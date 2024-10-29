@@ -1,9 +1,11 @@
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { authConfig } from "./auth.config";
 import { User } from "./model/user_model";
+import mongoClientPromise from "./queries/mongoClientPromise";
 
 async function refreshAccessToken(token) {}
 
@@ -13,6 +15,7 @@ export const {
   signOut,
   handlers: { GET, POST },
 } = NextAuth({
+  adapter: MongoDBAdapter(mongoClientPromise),
   ...authConfig,
   providers: [
     CredentialsProvider({
