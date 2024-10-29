@@ -11,7 +11,6 @@ export default auth((req) => {
   const isPublicRoute =
     PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) ||
     nextUrl.pathname === ROOT;
-
   if (!isAuthenticated && !isPublicRoute)
     return Response.redirect(new URL(LOGIN, nextUrl));
 
@@ -24,5 +23,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
