@@ -60,7 +60,6 @@ export const addPlaylistAction = async (playlistId) => {
     //check playlist id valid or not
     // if in valid error will throw getPlaylistDetails function
     await getPlaylistDetails(playlistId);
-
     //fetch
     const userId = loggedInUser._id;
     const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
@@ -81,8 +80,6 @@ export const addPlaylistAction = async (playlistId) => {
     revalidateTag("user-playlists");
     return;
   } catch (error) {
-    console.log(error);
-
     return {
       error: error.message,
     };
