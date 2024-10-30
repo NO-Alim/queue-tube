@@ -59,17 +59,22 @@ export const addPlaylistAction = async (playlistId) => {
     }
     //check playlist id valid or not
     // if in valid error will throw getPlaylistDetails function
-    await getPlaylistDetails(playlistId);
+    const playlistDetails = await getPlaylistDetails(playlistId);
     //fetch
     const userId = loggedInUser._id;
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/playlist/local`;
+
+    const dataToSave = {
+      playlistId,
+      userId,
+    };
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ playlistId, userId }),
+      body: JSON.stringify(dataToSave),
     });
 
     if (!response.ok) {
@@ -86,27 +91,22 @@ export const addPlaylistAction = async (playlistId) => {
   }
 };
 
-export const getPlaylistsAction = async ({
-  title,
-  limit = 5,
-  page = 1,
-  sort,
-} = {}) => {
+export const getPlaylistsAction = async (searchParams = {}) => {
   try {
     const loggedInUser = await getLoggedInUser();
     if (!loggedInUser._id) {
       throw new Error("You are not authenticated.");
     }
-    // Build the query parameters
 
+    // query parameters
     const params = new URLSearchParams();
-    params.append("userId", loggedInUser?._id);
-    if (title) params.append("title", title);
-    params.append("limit", limit);
-    params.append("page", page);
-    if (sort) params.append("sort", sort);
+    params.append("userId", loggedInUser._id);
+    params.append("limit", searchParams.limit || 5);
+    params.append("page", searchParams.page || 1);
+    if (searchParams.sort) params.append("sort", searchParams.sort);
+
     const url = `${
-      process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
+      process.env.NEXT_PUBLIC_BASE_URL_DEV
     }/api/playlist/local?${params.toString()}`;
     const response = await fetch(url, {
       next: { tags: ["user-playlists"] },
@@ -114,12 +114,13 @@ export const getPlaylistsAction = async ({
 
     if (!response.ok) {
       const errorData = await response.json();
-
       throw new Error(errorData.message || "Failed to fetch playlists.");
     }
 
     return await response.json();
   } catch (error) {
+    console.log(error);
+
     return {
       error: error.message,
     };

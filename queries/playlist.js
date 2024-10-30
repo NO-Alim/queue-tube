@@ -31,17 +31,16 @@ export const getPlaylistByUserId = async (
     // Set up query
     const query = { user: userId, ...searchParams };
 
-    //skip
+    // Calculate skip
     const skip = (page - 1) * limit;
 
-    // now fetch
-    const playlists = await Playlist.find(query)
-      .sort(sort)
-      .limit(limit)
-      .skip(skip)
-      .lean();
+    // Fetch playlists and total count
+    const [playlists, totalCount] = await Promise.all([
+      Playlist.find(query).sort(sort).limit(limit).skip(skip).lean(),
+      Playlist.countDocuments(query),
+    ]);
 
-    return playlists;
+    return { playlists, totalCount };
   } catch (error) {
     throw new Error(error);
   }

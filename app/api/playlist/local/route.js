@@ -51,7 +51,7 @@ export const GET = async (request) => {
 
 export const POST = async (request) => {
   try {
-    const { playlistId, userId } = await request.json();
+    const { playlistId, userId, title } = await request.json();
 
     // Check if user is authenticated
     if (!userId) {
@@ -69,7 +69,7 @@ export const POST = async (request) => {
     }
 
     // Add the playlist
-    await addPlaylist(playlistId, userId);
+    await addPlaylist(playlistId, userId, title);
 
     return new NextResponse("Playlist added successfully.", {
       status: 201,

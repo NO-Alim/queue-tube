@@ -1,9 +1,9 @@
 import { getPlaylistsAction } from "@/actions/playlistActions/playlistActions";
 import { auth } from "@/auth";
+import { CustomError } from "@/components/Error";
 import Link from "next/link";
 import { AddPlaylistModal } from "./components/AddPlaylistModal";
 import PlaylistContainer from "./components/PlaylistContainer";
-import SearchPlaylist from "./components/SearchPlaylist";
 import UnauthorizedHome from "./components/unauthorizedHome";
 
 const HomePage = async () => {
@@ -12,9 +12,9 @@ const HomePage = async () => {
     return <UnauthorizedHome />;
   }
 
-  const playlists = await getPlaylistsAction();
+  const { playlists, totalCount } = await getPlaylistsAction();
   if (playlists?.error) {
-    return <h1 className=" text-lg text-red-600">{playlists.error}</h1>;
+    return <CustomError message={playlists.error} />;
   }
 
   if (!playlists || playlists?.length === 0) {
@@ -35,9 +35,7 @@ const HomePage = async () => {
               </Link>
               <AddPlaylistModal />
             </div>
-            <div>
-              <SearchPlaylist />
-            </div>
+            <div>{/* <SearchInput redirectBaseUrl={"/playlists"} /> */}</div>
           </div>
         </div>
         <PlaylistContainer playlists={playlists} />

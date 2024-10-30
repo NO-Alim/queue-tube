@@ -10,7 +10,7 @@ const PlaylistContainer = async ({ playlists }) => {
       <div className="flex justify-between items-center">
         <h1 className=" text-2xl">Your Lists</h1>
         <Link
-          href={""}
+          href={"/playlists"}
           className=" text-sm font-medium  hover:text-red-600 flex items-center gap-1"
         >
           Browse All <ArrowRight className="h-4 w-4" />
