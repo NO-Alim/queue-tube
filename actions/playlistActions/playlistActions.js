@@ -62,7 +62,7 @@ export const addPlaylistAction = async (playlistId) => {
     const playlistDetails = await getPlaylistDetails(playlistId);
     //fetch
     const userId = loggedInUser._id;
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/playlist/local`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
 
     const dataToSave = {
       playlistId,
@@ -106,7 +106,7 @@ export const getPlaylistsAction = async (searchParams = {}) => {
     if (searchParams.sort) params.append("sort", searchParams.sort);
 
     const url = `${
-      process.env.NEXT_PUBLIC_BASE_URL_DEV
+      process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
     }/api/playlist/local?${params.toString()}`;
     const response = await fetch(url, {
       next: { tags: ["user-playlists"] },
