@@ -21,7 +21,7 @@ export const addPlaylist = async (playlistId, userId) => {
 export const getPlaylistByUserId = async (
   userId,
   searchParams = {},
-  limit = 5,
+  limit = process.env.NEXT_PUBLIC_TOTAL_COUNT,
   page = 1,
   sort = {}
 ) => {
@@ -37,7 +37,7 @@ export const getPlaylistByUserId = async (
     // Fetch playlists and total count
     const [playlists, totalCount] = await Promise.all([
       Playlist.find(query).sort(sort).limit(limit).skip(skip).lean(),
-      Playlist.countDocuments(query),
+      Playlist.countDocuments({ user: userId }),
     ]);
 
     return { playlists, totalCount };

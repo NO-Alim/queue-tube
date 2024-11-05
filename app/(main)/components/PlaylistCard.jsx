@@ -9,6 +9,8 @@ import Link from "next/link";
 const PlaylistCard = async ({ playlistId }) => {
   const playlistDetails = await getPlaylistDetails(playlistId);
 
+  if (!playlistDetails) return null;
+
   const {
     id,
     title,
@@ -23,7 +25,7 @@ const PlaylistCard = async ({ playlistId }) => {
 
   return (
     <div className="group space-y-2 hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
-      <Link href="#">
+      <Link href={`/playlists/${id}`}>
         <div>
           <div className="relative w-full aspect-video rounded-md overflow-hidden">
             <Image

@@ -47,7 +47,9 @@ export const getPlaylistDetails = async (playlistIdOrLink) => {
 
     return playlistDetails;
   } catch (error) {
-    throw new Error(error?.message || "Something went wrong.");
+    return {
+      error: error?.message || "Something went wrong.",
+    };
   }
 };
 
@@ -62,7 +64,7 @@ export const addPlaylistAction = async (playlistId) => {
     const playlistDetails = await getPlaylistDetails(playlistId);
     //fetch
     const userId = loggedInUser._id;
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/playlist/local`;
 
     const dataToSave = {
       playlistId,
@@ -101,12 +103,15 @@ export const getPlaylistsAction = async (searchParams = {}) => {
     // query parameters
     const params = new URLSearchParams();
     params.append("userId", loggedInUser._id);
-    params.append("limit", searchParams.limit || 5);
+    params.append(
+      "limit",
+      searchParams.limit || process.env.NEXT_PUBLIC_TOTAL_COUNT
+    );
     params.append("page", searchParams.page || 1);
     if (searchParams.sort) params.append("sort", searchParams.sort);
 
     const url = `${
-      process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
+      process.env.NEXT_PUBLIC_BASE_URL_DEV
     }/api/playlist/local?${params.toString()}`;
     const response = await fetch(url, {
       next: { tags: ["user-playlists"] },

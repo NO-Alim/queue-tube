@@ -11,8 +11,11 @@ import {
 } from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const CustomPagination = ({ totalCount, redirectBaseUrl }) => {
-  const limit = 6;
+const CustomPagination = ({
+  totalCount,
+  redirectBaseUrl,
+  limit = process.env.NEXT_PUBLIC_TOTAL_COUNT,
+}) => {
   const totalPages = Math.ceil(totalCount / limit);
   const searchParams = useSearchParams();
   const pathname = usePathname();

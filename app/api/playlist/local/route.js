@@ -7,7 +7,8 @@ import { NextResponse } from "next/server";
 
 export const GET = async (request) => {
   const searchParams = request.nextUrl.searchParams;
-  const limit = parseInt(searchParams.get("limit")) || 5;
+  const limit =
+    parseInt(searchParams.get("limit")) || process.env.NEXT_PUBLIC_TOTAL_COUNT;
   const page = parseInt(searchParams.get("page")) || 1;
   const userId = searchParams.get("userId");
 

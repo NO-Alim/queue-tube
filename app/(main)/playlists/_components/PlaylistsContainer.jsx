@@ -26,7 +26,10 @@ const PlaylistsContainer = async ({ searchParams = {} }) => {
           </Suspense>
         ))}
       </div>
-      <CustomPagination redirectBaseUrl={"/playlists"} totalCount />
+      <CustomPagination
+        redirectBaseUrl={"/playlists"}
+        totalCount={totalCount}
+      />
     </>
   );
 };
