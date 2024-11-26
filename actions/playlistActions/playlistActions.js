@@ -93,6 +93,7 @@ export const addPlaylistAction = async (playlistId) => {
   }
 };
 
+// get user playlist
 export const getPlaylistsAction = async (searchParams = {}) => {
   try {
     const loggedInUser = await getLoggedInUser();
@@ -124,10 +125,90 @@ export const getPlaylistsAction = async (searchParams = {}) => {
 
     return await response.json();
   } catch (error) {
-    console.log(error);
-
     return {
       error: error.message,
     };
+  }
+};
+
+// this details from local server, and it contain playlist history data and completed Playlist array.
+export const getPlaylistData = async (playlistId) => {
+  try {
+    const loggedInUser = await getLoggedInUser();
+    if (!loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    // query parameters
+    const params = new URLSearchParams();
+    params.append("userId", loggedInUser._id);
+
+    const url = `${
+      process.env.NEXT_PUBLIC_BASE_URL_DEV
+    }/api/playlist/local/${playlistId}?${params.toString()}`;
+    const response = await fetch(url, {
+      next: { tags: [`playlist-${playlistId}`] },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch playlists.");
+    }
+
+    return await response.json();
+  } catch (error) {
+    return {
+      error: error.message,
+    };
+  }
+};
+
+export const updatePlaylistAction = async (playlistId, data) => {
+  try {
+    // Validate playlistId
+    if (!playlistId) {
+      throw new Error(
+        "Cannot update history. Server cannot access your Playlist ID."
+      );
+    }
+
+    // Validate data
+    if (!data || Object.keys(data).length === 0) {
+      throw new Error("No data provided to update the playlist.");
+    }
+
+    // Fetch logged-in user
+    const loggedInUser = await getLoggedInUser();
+    if (!loggedInUser || !loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    const userId = loggedInUser._id;
+
+    // Prepare payload
+    const payload = {
+      dataToUpdate: data,
+      userId,
+    };
+
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/playlist/local/${playlistId}`;
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update the playlist.");
+    }
+
+    revalidateTag?.(`playlist-${playlistId}`);
+
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
   }
 };

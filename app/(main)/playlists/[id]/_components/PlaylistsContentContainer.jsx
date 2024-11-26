@@ -14,7 +14,11 @@ const PlaylistsContentContainer = async ({ id, searchParams }) => {
     <div className=" space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <PlaylistThumbnailInfo playlistDetails={playlistDetails} />
-        <VideoList videos={videos?.items} />
+        <VideoList
+          videos={videos?.items}
+          playlistId={id}
+          nextPageToken={nextPageToken}
+        />
       </div>
       <ButtonContainer
         nextPageToken={nextPageToken}

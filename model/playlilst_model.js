@@ -10,6 +10,15 @@ const playlistSchema = new Schema({
     type: String,
     required: true,
   },
+  video_completed: {
+    type: Array,
+  },
+  watch_history: {
+    type: String, // time 99:99:99
+  },
+  history_video_id: {
+    type: String,
+  },
 });
 
 // Compound index to enforce unique playlist_id per user

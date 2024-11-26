@@ -46,6 +46,16 @@ export const getPlaylistByUserId = async (
   }
 };
 
+export const getSinglePlaylist = async ({ userId, playlistId }) => {
+  try {
+    const query = { user: userId, playlist_id: playlistId };
+    const playlist = await Playlist.find(query);
+    return playlist;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const checkPlaylistExist = async (playlistId, userId) => {
   try {
     await dbConnect();
@@ -58,5 +68,44 @@ export const checkPlaylistExist = async (playlistId, userId) => {
     return true;
   } catch (error) {
     throw new Error(error);
+  }
+};
+
+export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
+  try {
+    const playlist = await Playlist.findOne({
+      user: userId,
+      playlist_id: playlistId,
+    });
+
+    if (!playlist) {
+      throw new Error("Playlist not found.");
+    }
+
+    // Handle video_completed array updates
+    if (dataToUpdate.video_completed) {
+      playlist.video_completed = Array.from(
+        new Set([
+          ...(playlist.video_completed || []),
+          ...dataToUpdate.video_completed,
+        ])
+      );
+    }
+
+    // Update other fields
+    Object.keys(dataToUpdate).forEach((key) => {
+      if (key !== "video_completed" && dataToUpdate[key] !== undefined) {
+        playlist[key] = dataToUpdate[key];
+      }
+    });
+
+    await playlist.save();
+
+    return {
+      message: "Playlist updated successfully.",
+      updatedPlaylist: playlist,
+    };
+  } catch (error) {
+    throw new Error(error.message || "Failed to update the playlist.");
   }
 };

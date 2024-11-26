@@ -4,7 +4,7 @@ import { CircleCheck, PlayCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const VideoCard = ({ video }) => {
+const VideoCard = ({ video, playlistId }) => {
   const {
     snippet: {
       title,
@@ -20,7 +20,7 @@ const VideoCard = ({ video }) => {
   return (
     <div className="group space-y-2 hover:shadow-sm transition overflow-hidden border rounded-lg p-3">
       <Link
-        href={`/video/${videoId}`}
+        href={`/playlists/${playlistId}/${videoId}`}
         className=" space-y-3 flex flex-col justify-between h-full"
       >
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
@@ -37,7 +37,7 @@ const VideoCard = ({ video }) => {
           <CircleCheck className=" text-green-500" />
         </div>
         <Link
-          href="#"
+          href={`/playlists/${playlistId}/${videoId}`}
           className={cn(
             buttonVariants({ size: "sm", variant: "destructive" }),
             "flex items-center font-semibold"
