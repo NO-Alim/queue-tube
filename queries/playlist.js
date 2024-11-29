@@ -2,8 +2,6 @@ import { Playlist } from "@/model/playlilst_model";
 import { dbConnect } from "@/service/mongo";
 
 export const addPlaylist = async (playlistId, userId) => {
-  console.log(userId);
-
   const newPlaylist = {
     user: userId,
     playlist_id: playlistId,

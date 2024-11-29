@@ -1,15 +1,22 @@
-import { getPlaylistDetails } from "@/actions/playlistActions/playlistActions";
+import {
+  getPlaylistData,
+  getPlaylistDetails,
+} from "@/actions/playlistActions/playlistActions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { truncateDescription } from "@/utils/truncate";
-import { PlayCircle, VideoIcon } from "lucide-react";
+import { PlayCircle, VideoIcon, ViewIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const PlaylistCard = async ({ playlistId }) => {
   const playlistDetails = await getPlaylistDetails(playlistId);
-
+  const playlistData = await getPlaylistData(playlistId);
   if (!playlistDetails) return null;
+
+  const currentPlaylist = playlistData.find(
+    (playlist) => playlist.playlist_id === playlistId
+  );
 
   const {
     id,
@@ -54,16 +61,29 @@ const PlaylistCard = async ({ playlistId }) => {
         </div>
       </Link>
       <div className="flex items-center justify-between">
-        <Link
-          href="#"
-          className={cn(
-            buttonVariants({ size: "sm", variant: "destructive" }),
-            "flex items-center font-semibold"
-          )}
-        >
-          <PlayCircle className="mr-2 h-4 w-4" />
-          <span>Play Now</span>
-        </Link>
+        {currentPlaylist?.history_video_id ? (
+          <Link
+            href={`/playlists/${id}/${currentPlaylist.history_video_id}`}
+            className={cn(
+              buttonVariants({ size: "sm", variant: "destructive" }),
+              "flex items-center font-semibold"
+            )}
+          >
+            <PlayCircle className="mr-2 h-4 w-4" />
+            <span>Play Now</span>
+          </Link>
+        ) : (
+          <Link
+            href={`/playlists/${id}`}
+            className={cn(
+              buttonVariants({ size: "sm", variant: "destructive" }),
+              "flex items-center font-semibold"
+            )}
+          >
+            <ViewIcon className="mr-2 h-4 w-4" />
+            <span>View Playlist</span>
+          </Link>
+        )}
       </div>
     </div>
   );

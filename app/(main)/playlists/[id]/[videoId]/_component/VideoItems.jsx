@@ -50,8 +50,6 @@ const VideoItems = ({
             resourceId: { videoId: snippetVideoId },
           },
         } = video;
-        console.log(snippetVideoId);
-        console.log(videosCompleted);
 
         const isCompleted = videosCompleted.includes(snippetVideoId);
         return (

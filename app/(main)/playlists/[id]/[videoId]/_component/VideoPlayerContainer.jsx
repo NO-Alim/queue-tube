@@ -21,10 +21,6 @@ const VideoPlayerContainer = async ({ playlistId, videoId }) => {
     (playlist) => playlist.playlist_id === playlistId
   );
 
-  if (!currentPlaylist) {
-    return <CustomError message="Playlist data not found" />;
-  }
-
   const videosCompleted = Array.isArray(currentPlaylist.video_completed)
     ? currentPlaylist.video_completed
     : [];

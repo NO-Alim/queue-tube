@@ -1,12 +1,38 @@
 "use client";
 
-import { updatePlaylistAction } from "@/actions/playlistActions/playlistActions";
+import {
+  getPlaylistData,
+  updatePlaylistAction,
+} from "@/actions/playlistActions/playlistActions";
+import { convertToSeconds } from "@/utils/timeConverter";
 import { throttle } from "lodash";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { toast } from "sonner";
 
 const Player = ({ playlistId, videoId }) => {
+  const [videoStartFrom, setVideoStartFrom] = useState(0);
+
+  const handleGetDetails = async () => {
+    try {
+      const playlistData = await getPlaylistData(playlistId);
+      const currentPlaylist = playlistData.find(
+        (playlist) => playlist.playlist_id === playlistId
+      );
+
+      if (videoId === currentPlaylist?.history_video_id) {
+        const seconds = convertToSeconds(currentPlaylist.watch_history);
+        setVideoStartFrom(seconds);
+      }
+    } catch (error) {
+      //
+    }
+  };
+
+  useEffect(() => {
+    handleGetDetails();
+  }, [playlistId]);
+
   const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
   const handleUpdateHistory = async (playlistId, timestamp) => {
@@ -18,8 +44,6 @@ const Player = ({ playlistId, videoId }) => {
 
       if (data?.error) {
         toast.error(data.error || "Something went wrong.");
-      } else {
-        //toast.success("Playlist history updated successfully.");
       }
     } catch (error) {
       toast.error(error?.message || "Error updating history.");
@@ -29,13 +53,11 @@ const Player = ({ playlistId, videoId }) => {
   const handleVideoCompletion = async (playlistId, videoId) => {
     try {
       const data = await updatePlaylistAction(playlistId, {
-        video_completed: [videoId], // Add the videoId to the video_completed array
+        video_completed: [videoId],
       });
 
       if (data?.error) {
         toast.error(data.error || "Something went wrong.");
-      } else {
-        //toast.success(videoId);
       }
     } catch (error) {
       toast.error(error?.message || "Error updating completed videos.");
@@ -48,9 +70,11 @@ const Player = ({ playlistId, videoId }) => {
     }, 10000),
     []
   );
+
   return (
     <div className="player-wrapper relative" style={{ paddingTop: "56.25%" }}>
       <ReactPlayer
+        key={videoStartFrom} // Forces reinitialization when start time changes
         url={youtubeUrl}
         controls={true}
         width="100%"
@@ -59,7 +83,11 @@ const Player = ({ playlistId, videoId }) => {
         onProgress={({ playedSeconds }) =>
           throttledUpdateHistory(playlistId, Math.floor(playedSeconds))
         }
-        onEnded={() => handleVideoCompletion(playlistId, videoId)}
+        onEnded={() => {
+          throttledUpdateHistory.flush();
+          handleVideoCompletion(playlistId, videoId);
+        }}
+        config={{ youtube: { playerVars: { start: videoStartFrom } } }}
       />
     </div>
   );
