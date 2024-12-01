@@ -1,10 +1,11 @@
+import { getPlaylistData } from "@/actions/playlistActions/playlistActions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CircleCheck, PlayCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const VideoCard = ({ video, playlistId }) => {
+const VideoCard = async ({ video, playlistId, videoCompleted }) => {
   const {
     snippet: {
       title,
@@ -16,6 +17,15 @@ const VideoCard = ({ video, playlistId }) => {
     },
     contentDetails: { videoPublishedAt },
   } = video;
+
+  const playlistData = await getPlaylistData(playlistId);
+
+  const currentPlaylist = playlistData.find(
+    (playlist) => playlist.playlist_id === playlistId
+  );
+
+  const isCompleted =
+    currentPlaylist?.video_completed.includes(videoId) || false;
 
   return (
     <div className="group space-y-2 hover:shadow-sm transition overflow-hidden border rounded-lg p-3">
@@ -34,7 +44,7 @@ const VideoCard = ({ video, playlistId }) => {
         </div>
         <div className=" flex items-center justify-between">
           <p className="text-xs text-gray-500 line-clamp-1">{channelTitle}</p>
-          <CircleCheck className=" text-green-500" />
+          {isCompleted && <CircleCheck className=" text-green-500" />}
         </div>
         <Link
           href={`/playlists/${playlistId}/${videoId}`}

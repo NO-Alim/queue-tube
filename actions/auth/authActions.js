@@ -74,7 +74,7 @@ export const singUpUser = async (formData) => {
     }
     // Register user via API
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/register`,
+      `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/register`,
       {
         method: "POST",
         headers: {

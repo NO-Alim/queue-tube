@@ -2,14 +2,13 @@
 
 import { addPlaylistAction } from "@/actions/playlistActions/playlistActions";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
 import { ArrowLeft, VideoIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
+import PlayerLink from "./PlayerLink";
 const AddPlaylistCard = ({
   playlistDetails,
   resetPlaylistData,
@@ -80,15 +79,7 @@ const AddPlaylistCard = ({
         </div>
       </div>
       {playlistExistInDB ? (
-        <Link
-          href="#"
-          className={cn(
-            buttonVariants({ size: "sm", variant: "destructive" }),
-            "px-4 font-bold"
-          )}
-        >
-          Play Now
-        </Link>
+        <PlayerLink playlistId={id} />
       ) : (
         <Button
           className="w-full"

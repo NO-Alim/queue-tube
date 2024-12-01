@@ -51,8 +51,19 @@ export function AddPlaylistModal() {
         throw new Error(errorData.error || "Failed to fetch playlist.");
       }
 
-      const playlistDetails = await response.json();
-      setPlaylistData(playlistDetails.data); // Access the 'data' field
+      const resPlaylistDetails = await response.json();
+      // response will be null when user provide wrong playlistId
+
+      if (!resPlaylistDetails) {
+        toast.error("Wrong Playlist Id provided.");
+        setPlaylistData(null);
+      } else {
+        if (resPlaylistDetails?.data?.error) {
+          toast.error(resPlaylistDetails.data.error);
+          return;
+        }
+        setPlaylistData(resPlaylistDetails.data);
+      }
     } catch (error) {
       setPlaylistData(null);
       toast.error(error.message || "Something went wrong!");

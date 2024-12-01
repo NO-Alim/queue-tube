@@ -4,7 +4,11 @@ import ButtonContainer from "./ButtonContainer";
 import PlaylistThumbnailInfo from "./PlaylistThumbnailInfo";
 import VideoList from "./VideoList";
 
-const PlaylistsContentContainer = async ({ id, searchParams }) => {
+const PlaylistsContentContainer = async ({
+  id,
+  searchParams,
+  videoCompleted,
+}) => {
   const { pageToken = "" } = searchParams || {};
   const playlistDetails = await getPlaylistDetails(id);
   const videos = await getVideos({ playlistId: id, pageToken: pageToken });
