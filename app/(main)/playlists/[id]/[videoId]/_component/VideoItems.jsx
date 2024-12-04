@@ -41,7 +41,13 @@ const VideoItems = ({
       hasMore={hasMore}
       loader={<LoadingSpinner />}
       height={typeof window !== "undefined" ? window.innerHeight - 129 : 500}
-      className=" scrollbar-hide space-y-5 "
+      className="space-y-5 h-full pr-1 overflow-y-auto
+      [&::-webkit-scrollbar]:w-2
+      [&::-webkit-scrollbar-track]:rounded-full
+      [&::-webkit-scrollbar-track]:bg-transparent
+      [&::-webkit-scrollbar-thumb]:rounded-full
+      [&::-webkit-scrollbar-thumb]:bg-gray-300
+      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
     >
       {videos.map((video, index) => {
         const {

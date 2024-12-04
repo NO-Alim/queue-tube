@@ -13,6 +13,11 @@ export const getPlaylistDetails = async (playlistIdOrLink) => {
     // for check playlist exist or not
     const session = await auth();
     const loggedInUser = await getLoggedInUser();
+
+    if (!loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
     const playlistAlreadyExist = await checkPlaylistExist(
       playlistId,
       loggedInUser._id

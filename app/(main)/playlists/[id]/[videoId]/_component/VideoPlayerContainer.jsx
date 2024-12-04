@@ -3,7 +3,6 @@ import {
   getPlaylistsAction,
 } from "@/actions/playlistActions/playlistActions";
 import { CustomError } from "@/components/Error";
-import NoteContainer from "./NoteContainer";
 import PlayerContainer from "./playerContainer";
 
 const VideoPlayerContainer = async ({ playlistId, videoId }) => {
@@ -32,7 +31,6 @@ const VideoPlayerContainer = async ({ playlistId, videoId }) => {
         videoId={videoId}
         videosCompleted={videosCompleted}
       />
-      <NoteContainer playlistId={playlistId} videoId={videoId} />
     </div>
   );
 };

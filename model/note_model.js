@@ -1,4 +1,6 @@
 import mongoose, { Schema } from "mongoose";
+import { v4 as uuidv4 } from "uuid";
+
 const noteSchema = new Schema({
   user: {
     type: Schema.ObjectId,
@@ -11,6 +13,10 @@ const noteSchema = new Schema({
   },
   notes: [
     {
+      noteId: {
+        type: String,
+        default: () => uuidv4(), // Generate a unique ID for each note
+      },
       text: {
         type: String,
         required: true,

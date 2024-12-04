@@ -9,9 +9,12 @@ import { throttle } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { toast } from "sonner";
+import AddNote from "./AddNote";
 
 const Player = ({ playlistId, videoId }) => {
   const [videoStartFrom, setVideoStartFrom] = useState(0);
+  const [progressTimestamp, setProgressTimestamp] = useState(0); // Tracks dynamic progress
+  const [capturedTimestamp, setCapturedTimestamp] = useState(null); // Tracks timestamp when modal is opened
 
   const handleGetDetails = async () => {
     try {
@@ -71,25 +74,40 @@ const Player = ({ playlistId, videoId }) => {
     []
   );
 
+  const handleOpenNoteModal = () => {
+    setCapturedTimestamp(progressTimestamp); // Capture timestamp when modal opens
+  };
+
   return (
-    <div className="player-wrapper relative" style={{ paddingTop: "56.25%" }}>
-      <ReactPlayer
-        key={videoStartFrom} // Forces reinitialization when start time changes
-        url={youtubeUrl}
-        controls={true}
-        width="100%"
-        height="100%"
-        className="absolute top-0 left-0"
-        onProgress={({ playedSeconds }) =>
-          throttledUpdateHistory(playlistId, Math.floor(playedSeconds))
-        }
-        onEnded={() => {
-          throttledUpdateHistory.flush();
-          handleVideoCompletion(playlistId, videoId);
-        }}
-        config={{ youtube: { playerVars: { start: videoStartFrom } } }}
-      />
-    </div>
+    <>
+      <div className="player-wrapper relative" style={{ paddingTop: "56.25%" }}>
+        <ReactPlayer
+          key={videoStartFrom} // Forces reinitialization when start time changes
+          url={youtubeUrl}
+          controls={true}
+          width="100%"
+          height="100%"
+          className="absolute top-0 left-0"
+          onProgress={({ playedSeconds }) => {
+            setProgressTimestamp(Math.floor(playedSeconds)); // Update dynamic progress
+            throttledUpdateHistory(playlistId, Math.floor(playedSeconds));
+          }}
+          onEnded={() => {
+            throttledUpdateHistory.flush();
+            handleVideoCompletion(playlistId, videoId);
+          }}
+          config={{ youtube: { playerVars: { start: videoStartFrom } } }}
+        />
+      </div>
+      <div className="mt-5 flex justify-end pr-5">
+        <AddNote
+          playlistId={playlistId}
+          videoId={videoId}
+          timestamp={capturedTimestamp}
+          onOpen={handleOpenNoteModal}
+        />
+      </div>
+    </>
   );
 };
 
