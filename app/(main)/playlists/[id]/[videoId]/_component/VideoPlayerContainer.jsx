@@ -3,7 +3,7 @@ import {
   getPlaylistsAction,
 } from "@/actions/playlistActions/playlistActions";
 import { CustomError } from "@/components/Error";
-import PlayerContainer from "./playerContainer";
+import PlayerContainer from "./PlayerContainer";
 
 const VideoPlayerContainer = async ({ playlistId, videoId }) => {
   const { playlists, totalCount } = await getPlaylistsAction();
