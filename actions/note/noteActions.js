@@ -23,7 +23,7 @@ export const getNotesAction = async (videoId) => {
     params.append("videoId", videoId);
 
     const url = `${
-      process.env.NEXT_PUBLIC_BASE_URL_DEV
+      process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION
     }/api/note?${params.toString()}`;
 
     //  GET request
@@ -74,7 +74,7 @@ export const addNoteAction = async (formData) => {
     }
 
     // Construct the API endpoint
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/note`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/note`;
 
     // Prepare data for the POST request
     const dataToSave = {
