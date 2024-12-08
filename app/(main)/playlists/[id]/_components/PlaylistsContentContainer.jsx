@@ -1,5 +1,6 @@
 import { getPlaylistDetails } from "@/actions/playlistActions/playlistActions";
 import { getVideos } from "@/actions/videos/videoAction";
+import { fetchWithRetry } from "@/utils/retry";
 import ButtonContainer from "./ButtonContainer";
 import PlaylistThumbnailInfo from "./PlaylistThumbnailInfo";
 import VideoList from "./VideoList";
@@ -10,8 +11,10 @@ const PlaylistsContentContainer = async ({
   videoCompleted,
 }) => {
   const { pageToken = "" } = searchParams || {};
-  const playlistDetails = await getPlaylistDetails(id);
-  const videos = await getVideos({ playlistId: id, pageToken: pageToken });
+  const playlistDetails = await fetchWithRetry(() => getPlaylistDetails(id));
+  const videos = await fetchWithRetry(() =>
+    getVideos({ playlistId: id, pageToken: pageToken })
+  );
   const nextPageToken = videos?.nextPageToken || "";
   const prevPageToken = videos?.prevPageToken || "";
   return (

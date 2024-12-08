@@ -1,6 +1,7 @@
 import { getPlaylistData } from "@/actions/playlistActions/playlistActions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { fetchWithRetry } from "@/utils/retry";
 import { PlayCircle, ViewIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -8,10 +9,15 @@ import { useEffect, useState } from "react";
 const PlayerLink = ({ playlistId }) => {
   const [playlistData, setPlaylistData] = useState(null);
   const handleDetails = async (playlistId) => {
-    const playlistData = await getPlaylistData(playlistId);
-    const currentPlaylist = playlistData.find(
-      (playlist) => playlist.playlist_id === playlistId
+    const playlistData = await fetchWithRetry(() =>
+      getPlaylistData(playlistId)
     );
+
+    const currentPlaylist =
+      Array.isArray(playlistData) && playlistData.length > 0
+        ? playlistData.find((playlist) => playlist.playlist_id === playlistId)
+        : null;
+
     setPlaylistData(currentPlaylist);
   };
 

@@ -1,9 +1,10 @@
 import { getNotesAction } from "@/actions/note/noteActions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchWithRetry } from "@/utils/retry";
 import SingleNote from "./SingleNote";
 
 const NoteContainer = async ({ playlistId, videoId }) => {
-  const notesResponse = await getNotesAction(videoId);
+  const notesResponse = await fetchWithRetry(() => getNotesAction(videoId));
 
   const error = !notesResponse.success;
   const notes = notesResponse.success && notesResponse.data.notes;

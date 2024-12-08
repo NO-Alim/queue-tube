@@ -4,19 +4,24 @@ import {
 } from "@/actions/playlistActions/playlistActions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { fetchWithRetry } from "@/utils/retry";
 import { truncateDescription } from "@/utils/truncate";
 import { PlayCircle, VideoIcon, ViewIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const PlaylistCard = async ({ playlistId }) => {
-  const playlistDetails = await getPlaylistDetails(playlistId);
-  const playlistData = await getPlaylistData(playlistId);
+  const playlistDetails = await fetchWithRetry(() =>
+    getPlaylistDetails(playlistId)
+  );
+  const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
+
   if (!playlistDetails) return null;
 
-  const currentPlaylist = playlistData.find(
-    (playlist) => playlist.playlist_id === playlistId
-  );
+  const currentPlaylist =
+    Array.isArray(playlistData) && playlistData.length > 0
+      ? playlistData.find((playlist) => playlist.playlist_id === playlistId)
+      : null;
 
   const {
     id,

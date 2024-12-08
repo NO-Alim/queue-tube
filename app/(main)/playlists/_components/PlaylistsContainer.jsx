@@ -1,13 +1,16 @@
 import { getPlaylistsAction } from "@/actions/playlistActions/playlistActions";
 import { CustomError } from "@/components/Error";
 import PlaylistCardSkeleton from "@/components/PlaylistCardSkeleton";
+import { fetchWithRetry } from "@/utils/retry";
 import { Suspense } from "react";
 import PlaylistCard from "../../components/PlaylistCard";
 import UnauthorizedHome from "../../components/unauthorizedHome";
 import CustomPagination from "./CustomPaginaiton";
 
 const PlaylistsContainer = async ({ searchParams = {} }) => {
-  const { playlists, totalCount } = await getPlaylistsAction(searchParams);
+  const { playlists, totalCount } = await fetchWithRetry(() =>
+    getPlaylistsAction(searchParams)
+  );
 
   if (playlists?.error) {
     return <CustomError message={playlists.error} />;

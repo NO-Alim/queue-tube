@@ -4,6 +4,7 @@ import {
   getPlaylistData,
   updatePlaylistAction,
 } from "@/actions/playlistActions/playlistActions";
+import { fetchWithRetry } from "@/utils/retry";
 import { convertToSeconds } from "@/utils/timeConverter";
 import { throttle } from "lodash";
 import { useCallback, useEffect, useState } from "react";
@@ -18,10 +19,13 @@ const Player = ({ playlistId, videoId }) => {
 
   const handleGetDetails = async () => {
     try {
-      const playlistData = await getPlaylistData(playlistId);
-      const currentPlaylist = playlistData.find(
-        (playlist) => playlist.playlist_id === playlistId
+      const playlistData = await fetchWithRetry(() =>
+        getPlaylistData(playlistId)
       );
+      const currentPlaylist =
+        Array.isArray(playlistData) && playlistData.length > 0
+          ? playlistData.find((playlist) => playlist.playlist_id === playlistId)
+          : null;
 
       if (videoId === currentPlaylist?.history_video_id) {
         const seconds = convertToSeconds(currentPlaylist.watch_history);

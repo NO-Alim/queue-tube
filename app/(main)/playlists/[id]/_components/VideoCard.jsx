@@ -1,6 +1,7 @@
 import { getPlaylistData } from "@/actions/playlistActions/playlistActions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { fetchWithRetry } from "@/utils/retry";
 import { CircleCheck, PlayCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,11 +19,12 @@ const VideoCard = async ({ video, playlistId, videoCompleted }) => {
     contentDetails: { videoPublishedAt },
   } = video;
 
-  const playlistData = await getPlaylistData(playlistId);
+  const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
 
-  const currentPlaylist = playlistData.find(
-    (playlist) => playlist.playlist_id === playlistId
-  );
+  const currentPlaylist =
+    Array.isArray(playlistData) && playlistData.length > 0
+      ? playlistData.find((playlist) => playlist.playlist_id === playlistId)
+      : null;
 
   const isCompleted =
     currentPlaylist?.video_completed.includes(videoId) || false;

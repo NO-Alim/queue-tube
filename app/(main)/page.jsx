@@ -1,6 +1,7 @@
 import { getPlaylistsAction } from "@/actions/playlistActions/playlistActions";
 import { auth } from "@/auth";
 import { CustomError } from "@/components/Error";
+import { fetchWithRetry } from "@/utils/retry";
 import { AddPlaylistModal } from "./components/AddPlaylistModal";
 import PlaylistContainer from "./components/PlaylistContainer";
 import UnauthorizedHome from "./components/unauthorizedHome";
@@ -11,7 +12,9 @@ const HomePage = async () => {
     return <UnauthorizedHome />;
   }
 
-  const { playlists, totalCount } = await getPlaylistsAction();
+  const { playlists, totalCount } = await fetchWithRetry(() =>
+    getPlaylistsAction()
+  );
   if (playlists?.error) {
     return <CustomError message={playlists.error} />;
   }

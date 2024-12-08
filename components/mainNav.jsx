@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getLoggedInUser } from "@/lib/loggedInUser";
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
 import Link from "next/link";
@@ -16,6 +17,7 @@ import {
 
 const MainNav = async () => {
   const session = await auth();
+  const user = await getLoggedInUser();
 
   return (
     <nav className=" container py-2 w-full flex justify-between items-center bg-primary/5">
@@ -29,7 +31,9 @@ const MainNav = async () => {
               <DropdownMenuTrigger asChild>
                 <Avatar className=" cursor-pointer">
                   <AvatarImage src="" />
-                  <AvatarFallback>AB</AvatarFallback>
+                  <AvatarFallback className=" capitalize">
+                    {user?.firstName}
+                  </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
