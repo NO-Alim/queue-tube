@@ -1,6 +1,6 @@
 import NoteContainer from "../_component/NoteContainer";
 
-const NoteTab = ({ params: { id: playlistId, videoId } }) => {
+const NotePageTab = ({ params: { playlistId, videoId } }) => {
   return (
     <div>
       <NoteContainer playlistId={playlistId} videoId={videoId} />
@@ -8,4 +8,4 @@ const NoteTab = ({ params: { id: playlistId, videoId } }) => {
   );
 };
 
-export default NoteTab;
+export default NotePageTab;

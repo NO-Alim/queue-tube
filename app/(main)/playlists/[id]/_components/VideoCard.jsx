@@ -32,7 +32,7 @@ const VideoCard = async ({ video, playlistId, videoCompleted }) => {
   return (
     <div className="group space-y-2 hover:shadow-sm transition overflow-hidden border rounded-lg p-3">
       <Link
-        href={`/playlists/${playlistId}/${videoId}`}
+        href={`/player/${playlistId}/${videoId}`}
         className=" space-y-3 flex flex-col justify-between h-full"
       >
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
@@ -49,7 +49,7 @@ const VideoCard = async ({ video, playlistId, videoCompleted }) => {
           {isCompleted && <CircleCheck className=" text-green-500" />}
         </div>
         <Link
-          href={`/playlists/${playlistId}/${videoId}`}
+          href={`/player/${playlistId}/${videoId}`}
           className={cn(
             buttonVariants({ size: "sm", variant: "destructive" }),
             "flex items-center font-semibold"

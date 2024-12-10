@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Loading = () => {
+const SidebarVideoLoading = () => {
   return (
     <div className="mt-6 lg:mt-0 w-full lg:max-w-[350px] space-y-4">
       {[...Array(3)].map((_, index) => (
@@ -16,4 +16,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default SidebarVideoLoading;

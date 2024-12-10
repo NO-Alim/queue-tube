@@ -2,13 +2,12 @@ import {
   getPlaylistData,
   getPlaylistsAction,
 } from "@/actions/playlistActions/playlistActions";
+import { VideoProvider } from "@/provider/VideoContext";
 import { fetchWithRetry } from "@/utils/retry";
-import VideoItems from "../_component/VideoItems";
 
-const VideoTab = async ({ params: { id: playlistId, videoId } }) => {
-  const { playlists } = await fetchWithRetry(() => getPlaylistsAction());
+const PlayerLandingPage = async ({ children, params: { playlistId } }) => {
   const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
-
+  const { playlists } = await fetchWithRetry(() => getPlaylistsAction());
   // Ensure the playlist exists for the authenticated user
   const exists = playlists.some((item) => item.playlist_id === playlistId);
   if (!exists) {
@@ -25,14 +24,12 @@ const VideoTab = async ({ params: { id: playlistId, videoId } }) => {
     : [];
 
   return (
-    <div className="mt-6 lg:mt-0 w-full lg:w-1/4 space-y-4">
-      <VideoItems
-        playlistId={playlistId}
-        videoId={videoId}
-        videosCompleted={videosCompleted}
-      />
+    <div>
+      <VideoProvider playlistId={playlistId} videosCompleted={videosCompleted}>
+        {children}
+      </VideoProvider>
     </div>
   );
 };
 
-export default VideoTab;
+export default PlayerLandingPage;

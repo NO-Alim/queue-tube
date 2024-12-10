@@ -1,6 +1,8 @@
+"use client";
+
 import Player from "../_component/Player";
 
-const PlayerTab = ({ params: { id: playlistId, videoId } }) => {
+const PlayerPageTab = ({ params: { playlistId, videoId } }) => {
   return (
     <div className="w-full lg:w-3/4">
       <Player videoId={videoId} playlistId={playlistId} />
@@ -8,4 +10,4 @@ const PlayerTab = ({ params: { id: playlistId, videoId } }) => {
   );
 };
 
-export default PlayerTab;
+export default PlayerPageTab;

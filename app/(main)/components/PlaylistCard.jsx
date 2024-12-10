@@ -68,7 +68,7 @@ const PlaylistCard = async ({ playlistId }) => {
       <div className="flex items-center justify-between">
         {currentPlaylist?.history_video_id ? (
           <Link
-            href={`/playlists/${id}/${currentPlaylist.history_video_id}`}
+            href={`/player/${id}/${currentPlaylist.history_video_id}`}
             className={cn(
               buttonVariants({ size: "sm", variant: "destructive" }),
               "flex items-center font-semibold"
