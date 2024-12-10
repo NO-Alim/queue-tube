@@ -107,3 +107,21 @@ export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
     throw new Error(error.message || "Failed to update the playlist.");
   }
 };
+
+export const deletePlaylist = async (playlistId, userId) => {
+  // Check if the playlist exists and belongs to the user
+  const playlist = await Playlist.findOne({
+    playlist_id: playlistId,
+    user: userId,
+  });
+
+  if (!playlist) {
+    throw new Error(
+      "Playlist not found or you do not have permission to delete it."
+    );
+  }
+
+  await Playlist.deleteOne({ playlist_id: playlistId, user: userId });
+
+  return true;
+};

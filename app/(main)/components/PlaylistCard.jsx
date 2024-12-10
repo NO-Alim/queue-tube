@@ -9,6 +9,7 @@ import { truncateDescription } from "@/utils/truncate";
 import { PlayCircle, VideoIcon, ViewIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import PlaylistDeleteButton from "./PlaylistDeleteButton";
 
 const PlaylistCard = async ({ playlistId }) => {
   const playlistDetails = await fetchWithRetry(() =>
@@ -89,6 +90,7 @@ const PlaylistCard = async ({ playlistId }) => {
             <span>View Playlist</span>
           </Link>
         )}
+        <PlaylistDeleteButton playlistId={playlistId} />
       </div>
     </div>
   );

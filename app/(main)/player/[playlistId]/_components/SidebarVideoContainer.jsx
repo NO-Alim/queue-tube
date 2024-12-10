@@ -12,12 +12,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import SidebarVideoLoading from "../[videoId]/@videos/loading";
 import SidebarSingleVideo from "./SidebarSingleVideo";
 
-const SidebarVideoContainer = ({
-  videoId,
-  playlistId,
-  videosCompleted = [],
-}) => {
-  const { videos, hasMore, fetchMoreVideos } = useVideoContext();
+const SidebarVideoContainer = ({ videoId, playlistId }) => {
+  const { videos, hasMore, fetchMoreVideos, videosCompleted } =
+    useVideoContext();
   const scrollContainerRef = useRef(null);
 
   // Prevent default scroll reset on render

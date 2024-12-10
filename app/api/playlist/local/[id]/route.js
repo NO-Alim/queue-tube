@@ -1,4 +1,8 @@
-import { getSinglePlaylist, updatePlaylistData } from "@/queries/playlist";
+import {
+  deletePlaylist,
+  getSinglePlaylist,
+  updatePlaylistData,
+} from "@/queries/playlist";
 import { NextResponse } from "next/server";
 
 export const GET = async (request, { params }) => {
@@ -41,6 +45,45 @@ export const PATCH = async (request, { params }) => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
+  } catch (error) {
+    return new NextResponse(error.message, { status: 500 });
+  }
+};
+
+export const DELETE = async (request, { params }) => {
+  const { id } = params || {};
+
+  try {
+    const body = await request.json();
+    const { userId } = body || {};
+
+    // Validate user authentication
+    if (!userId) {
+      return new NextResponse("You are not authenticated.", { status: 401 });
+    }
+
+    // Validate playlist ID
+    if (!id) {
+      return new NextResponse("Playlist ID is required.", { status: 400 });
+    }
+
+    // Call a function to delete the playlist (implement this in your backend logic)
+    const result = await deletePlaylist(id, userId);
+
+    if (!result) {
+      return new NextResponse(
+        "Playlist not found or you do not have permission to delete it.",
+        { status: 404 }
+      );
+    }
+
+    return new NextResponse(
+      JSON.stringify({ message: "Playlist deleted successfully." }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     return new NextResponse(error.message, { status: 500 });
   }

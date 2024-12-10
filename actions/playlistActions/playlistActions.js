@@ -217,3 +217,45 @@ export const updatePlaylistAction = async (playlistId, data) => {
     return { error: error.message };
   }
 };
+
+export const deletePlaylistAction = async (playlistId) => {
+  try {
+    // Validate playlistId
+    if (!playlistId) {
+      throw new Error(
+        "Cannot delete playlist. Server cannot access your Playlist ID."
+      );
+    }
+
+    // Fetch logged-in user
+    const loggedInUser = await getLoggedInUser();
+    if (!loggedInUser || !loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    const userId = loggedInUser._id;
+
+    // Prepare payload
+    const payload = { userId };
+
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local/${playlistId}`;
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete the playlist.");
+    }
+
+    revalidateTag?.(`user-playlists`);
+
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
