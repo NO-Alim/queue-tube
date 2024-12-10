@@ -71,6 +71,7 @@ export const checkPlaylistExist = async (playlistId, userId) => {
 
 export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
   try {
+    await dbConnect();
     const playlist = await Playlist.findOne({
       user: userId,
       playlist_id: playlistId,
@@ -109,19 +110,24 @@ export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
 };
 
 export const deletePlaylist = async (playlistId, userId) => {
-  // Check if the playlist exists and belongs to the user
-  const playlist = await Playlist.findOne({
-    playlist_id: playlistId,
-    user: userId,
-  });
+  try {
+    await dbConnect();
+    // Check if the playlist exists and belongs to the user
+    const playlist = await Playlist.findOne({
+      playlist_id: playlistId,
+      user: userId,
+    });
 
-  if (!playlist) {
-    throw new Error(
-      "Playlist not found or you do not have permission to delete it."
-    );
+    if (!playlist) {
+      throw new Error(
+        "Playlist not found or you do not have permission to delete it."
+      );
+    }
+
+    await Playlist.deleteOne({ playlist_id: playlistId, user: userId });
+
+    return true;
+  } catch (error) {
+    throw new Error(error);
   }
-
-  await Playlist.deleteOne({ playlist_id: playlistId, user: userId });
-
-  return true;
 };
