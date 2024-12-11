@@ -57,7 +57,11 @@ export const getNotes = async (userId, videoId) => {
       };
     }
 
-    return { notes: noteDocument.notes };
+    return {
+      notes: noteDocument.notes,
+      id: noteDocument._id,
+      videoId: noteDocument.video_id,
+    };
   } catch (error) {
     throw new Error("Failed to retrieve notes: " + error.message);
   }
@@ -86,10 +90,8 @@ export const updateNote = async (id, userId, noteId, updatedText) => {
       );
     }
 
-    // Find the specific note in the notes array by noteId
-    const noteToUpdate = noteDocument.notes.find(
-      (note) => note.noteId === noteId
-    );
+    // Find the specific note in the notes array by noteId( arrays note id)
+    const noteToUpdate = noteDocument.notes.find((note) => note._id === noteId);
 
     if (!noteToUpdate) {
       throw new Error("Specific note not found in the notes array.");
@@ -103,7 +105,7 @@ export const updateNote = async (id, userId, noteId, updatedText) => {
 
     return {
       message: "Note updated successfully.",
-      updatedNote: { noteId, text: updatedText },
+      updatedNote: { _id: noteId, text: updatedText },
     };
   } catch (error) {
     throw new Error("Failed to update note: " + error.message);
@@ -114,33 +116,35 @@ export const deleteNote = async (id, userId, noteId) => {
   try {
     await dbConnect();
 
+    // Validate parameters
     if (!id || !userId || !noteId) {
       throw new Error("Missing required parameters: id, userId, or noteId.");
     }
 
+    // Fetch the note document
     const noteDocument = await Note.findById(id);
 
     if (!noteDocument) {
       throw new Error("Note document not found.");
     }
 
-    // Check if the user is authorized to delete the note
+    // Authorization check
     if (noteDocument.user.toString() !== userId) {
       throw new Error(
         "Unauthorized: User does not have permission to delete this note."
       );
     }
 
-    // Find the index of the specific note in the notes array
+    // Find the note by its _id if noteId refers to Mongoose's default ID
     const noteIndex = noteDocument.notes.findIndex(
-      (note) => note.noteId === noteId
+      (note) => note._id.toString() === noteId
     );
 
     if (noteIndex === -1) {
       throw new Error("Specific note not found in the notes array.");
     }
 
-    // Remove the specific note from the notes array
+    // Remove the note
     noteDocument.notes.splice(noteIndex, 1);
 
     // Save the updated document

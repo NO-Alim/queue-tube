@@ -1,5 +1,6 @@
 "use client";
 import { deletePlaylistAction } from "@/actions/playlistActions/playlistActions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -9,6 +10,13 @@ const PlaylistDeleteButton = ({ playlistId }) => {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async (playlistId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this playlist?"
+    );
+
+    if (!confirmDelete) {
+      return; // Exit if the user cancels
+    }
     setLoading(true);
     try {
       const response = await deletePlaylistAction(playlistId);
@@ -33,8 +41,14 @@ const PlaylistDeleteButton = ({ playlistId }) => {
       className=" flex items-center font-semibold"
       onClick={() => handleDelete(playlistId)}
     >
-      <Trash2 className=" mr-2 h-4 w-4" />
-      <span>Delete</span>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <Trash2 className=" mr-2 h-4 w-4" />
+          <span>Delete</span>
+        </>
+      )}
     </Button>
   );
 };

@@ -113,3 +113,38 @@ export const addNoteAction = async (formData) => {
     };
   }
 };
+
+export const deleteNoteAction = async (id, noteId, videoId) => {
+  try {
+    const loggedUser = await getLoggedInUser();
+
+    // Check if user is authenticated
+    if (!loggedUser || !loggedUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    const userId = loggedUser._id;
+
+    const payload = { id, userId, noteId };
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/note`;
+
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete the playlist.");
+    }
+
+    revalidateTag?.(`note-${videoId}`);
+
+    return await response.json();
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};

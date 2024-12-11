@@ -24,10 +24,7 @@ export const GET = async (request) => {
     // get notes
     const notes = await getNotes(userId, videoId);
 
-    return NextResponse.json(
-      { success: true, notes: notes.notes },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, notes }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -99,6 +96,7 @@ export const POST = async (request) => {
 
 export const PATCH = async (request) => {
   try {
+    // here id is main _id and noteId is arrays single note Id.
     const { id, userId, noteId, updatedText } = await request.json();
 
     if (!userId) {
@@ -147,31 +145,31 @@ export const DELETE = async (request) => {
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, message: "You are not authenticated" },
+        { success: false, message: "You are not authenticated." },
         { status: 401 }
       );
     }
 
     if (!id || !noteId) {
       return NextResponse.json(
-        { success: false, message: "Missing required information" },
+        { success: false, message: "Missing required information." },
         { status: 400 }
       );
     }
 
-    // delete here
+    // Perform the deletion
     const result = await deleteNote(id, userId, noteId);
 
     return NextResponse.json(
       {
         success: true,
-        message: result.message,
+        message: result?.message || "Note deleted successfully.",
       },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: "An internal error occurred." },
       { status: 500 }
     );
   }

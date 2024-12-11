@@ -7,7 +7,7 @@ const NoteContainer = async ({ playlistId, videoId }) => {
   const notesResponse = await fetchWithRetry(() => getNotesAction(videoId));
 
   const error = !notesResponse.success;
-  const notes = notesResponse.success && notesResponse.data.notes;
+  const notes = notesResponse.success && notesResponse.data.notes.notes;
 
   return (
     <Tabs defaultValue="note" className=" flex flex-col gap-3">
@@ -27,11 +27,19 @@ const NoteContainer = async ({ playlistId, videoId }) => {
         {!error &&
           notes?.length > 0 &&
           notes.map((note, index) => (
-            <SingleNote note={note} key={note.noteId} />
+            <SingleNote
+              id={notesResponse?.data?.notes.id}
+              videoId={notesResponse?.data?.notes.videoId}
+              note={note}
+              key={note.noteId}
+            />
           ))}
       </TabsContent>
       <TabsContent value="description">
-        Tab content for Description.
+        <p className="text-gray-500">
+          {" "}
+          Right Now Description Feature is Disabled.
+        </p>
       </TabsContent>
     </Tabs>
   );
