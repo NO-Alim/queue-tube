@@ -2,7 +2,7 @@
 
 import { TriangleAlert } from "lucide-react";
 
-const PlayerPageError = ({ error }) => {
+const PlaylistPageError = ({ error }) => {
   return (
     <div className="mt-6 lg:mt-0 w-full h-screen  space-y-4     flex flex-col items-center justify-center">
       <span>
@@ -15,4 +15,4 @@ const PlayerPageError = ({ error }) => {
   );
 };
 
-export default PlayerPageError;
+export default PlaylistPageError;
