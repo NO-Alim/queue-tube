@@ -1,5 +1,6 @@
 "use client";
-import { addNoteAction } from "@/actions/note/noteActions";
+
+import { addNoteAction, editNoteAction } from "@/actions/note/noteActions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,42 +18,73 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ClipboardPlus } from "lucide-react";
+import { ClipboardPlus, Pencil } from "lucide-react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
-const AddNote = ({ playlistId, videoId, timestamp, onOpen }) => {
+const AddNote = ({
+  playlistId,
+  videoId,
+  timestamp,
+  onOpen,
+  edit = false,
+  currentText = "",
+  id = null,
+  noteId = null,
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [noteText, setNoteText] = useState("");
 
   const toggleDialog = useCallback(() => {
-    setDialogOpen((prev) => !prev);
-    if (!dialogOpen && onOpen) onOpen(); // Capture timestamp when opening modal
-  }, [dialogOpen, onOpen]);
+    setDialogOpen((prev) => {
+      const isOpening = !prev;
+      if (isOpening) {
+        setNoteText(currentText || ""); // Initialize text when opening
+        if (onOpen) onOpen(); // Trigger the optional onOpen callback
+      }
+      return isOpening;
+    });
+  }, [currentText, onOpen]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const note = formData.get("text");
-    if (!note) {
+
+    if (!noteText.trim()) {
       toast.error("Please enter valid note text.");
+      return;
+    }
+
+    if (edit && noteText.trim() === currentText.trim()) {
+      toast.warning("You have not made any changes to the note.");
       return;
     }
 
     try {
       setLoading(true);
-      formData.append("videoId", videoId);
-      formData.append("timestamp", timestamp);
 
-      const result = await addNoteAction(formData);
+      let result;
+      if (edit) {
+        result = await editNoteAction(id, noteId, videoId, noteText);
+      } else {
+        const formData = new FormData();
+        formData.append("videoId", videoId);
+        formData.append("timestamp", timestamp);
+        formData.append("text", noteText);
+
+        result = await addNoteAction(formData);
+      }
+
       if (result.success) {
-        toast.success("Note added successfully.");
+        toast.success(
+          edit ? "Note updated successfully." : "Note added successfully."
+        );
         toggleDialog();
       } else {
-        toast.error(result.error);
+        throw new Error(result.message || "An error occurred.");
       }
     } catch (error) {
-      toast.error(error?.message || "Something wrong.");
+      toast.error(error.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -64,26 +96,36 @@ const AddNote = ({ playlistId, videoId, timestamp, onOpen }) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <DialogTrigger asChild>
-              <Button
-                variant="secondary"
-                className="flex justify-between gap-3"
-              >
-                <span className="font-bold">Add Note</span>
-                <ClipboardPlus />
-              </Button>
+              {edit ? (
+                <Button variant="outline" size="sm">
+                  <Pencil className=" w-4 h-4" />
+                </Button>
+              ) : (
+                <Button
+                  variant="secondary"
+                  className="flex justify-between gap-3"
+                >
+                  <span className="font-bold">Add Note</span>
+                  <ClipboardPlus />
+                </Button>
+              )}
             </DialogTrigger>
           </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>
-              Shortcut Key <span className="p-1 border rounded">Ctrl</span> +{" "}
-              <span className="p-1 border rounded">Space</span>
-            </p>
-          </TooltipContent>
+          {!edit && (
+            <TooltipContent side="bottom">
+              <p>
+                Shortcut Key <span className="p-1 border rounded">Ctrl</span> +{" "}
+                <span className="p-1 border rounded">Space</span>
+              </p>
+            </TooltipContent>
+          )}
         </Tooltip>
       </TooltipProvider>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-center">Add Note</DialogTitle>
+          <DialogTitle className="text-center">
+            {edit ? "Edit Note" : "Add Note"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={submitHandler}>
           <div className="grid gap-4 py-4">
@@ -94,6 +136,8 @@ const AddNote = ({ playlistId, videoId, timestamp, onOpen }) => {
               <Textarea
                 name="text"
                 id="text"
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
                 placeholder="Type Your Note Text."
               />
               <div className="flex justify-end">

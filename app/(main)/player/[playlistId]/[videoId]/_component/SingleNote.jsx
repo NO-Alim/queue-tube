@@ -2,9 +2,10 @@
 import { deleteNoteAction } from "@/actions/note/noteActions";
 import { Button } from "@/components/ui/button";
 import { formatTimestamp } from "@/utils/timeConverter";
-import { Clock4, Pencil, Tally1, Trash2 } from "lucide-react";
+import { Clock4, Tally1, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import AddNote from "./AddNote";
 
 const SingleNote = ({ id, note, videoId }) => {
   const [loading, setLoading] = useState(false);
@@ -51,9 +52,13 @@ const SingleNote = ({ id, note, videoId }) => {
           <p>{text || "No content available for this note."}</p>
         </div>
         <div className=" flex space-x-2">
-          <Button disabled={loading} size="sm" variant="outline">
-            <Pencil className=" w-4 h-4" />
-          </Button>
+          <AddNote
+            edit={true}
+            videoId={videoId}
+            currentText={text}
+            id={id}
+            noteId={_id}
+          />
           <Button
             onClick={() => handleDelete(id, _id, videoId)}
             disabled={loading}

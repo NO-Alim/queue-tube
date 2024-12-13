@@ -97,8 +97,7 @@ export const POST = async (request) => {
 export const PATCH = async (request) => {
   try {
     // here id is main _id and noteId is arrays single note Id.
-    const { id, userId, noteId, updatedText } = await request.json();
-
+    const { id, userId, noteId, text } = await request.json();
     if (!userId) {
       return NextResponse.json(
         { success: false, message: "You are not authenticated" },
@@ -106,14 +105,14 @@ export const PATCH = async (request) => {
       );
     }
 
-    if (!id || !noteId || !updatedText) {
+    if (!id || !noteId || !text) {
       return NextResponse.json(
         { success: false, message: "Missing required information" },
         { status: 400 }
       );
     }
 
-    if (typeof updatedText !== "string") {
+    if (typeof text !== "string") {
       return NextResponse.json(
         { success: false, message: "Invalid data format" },
         { status: 400 }
@@ -121,7 +120,7 @@ export const PATCH = async (request) => {
     }
 
     // update here
-    const result = await updateNote(id, userId, noteId, updatedText);
+    const result = await updateNote(id, userId, noteId, text);
 
     return NextResponse.json(
       {

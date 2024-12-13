@@ -67,13 +67,13 @@ export const getNotes = async (userId, videoId) => {
   }
 };
 
-export const updateNote = async (id, userId, noteId, updatedText) => {
+export const updateNote = async (id, userId, noteId, text) => {
   try {
     await dbConnect();
 
-    if (!id || !userId || !noteId || !updatedText) {
+    if (!id || !userId || !noteId || !text) {
       throw new Error(
-        "Missing required parameters: id, userId, noteId, or updatedText."
+        "Missing required parameters: id, userId, noteId, or text."
       );
     }
 
@@ -91,21 +91,25 @@ export const updateNote = async (id, userId, noteId, updatedText) => {
     }
 
     // Find the specific note in the notes array by noteId( arrays note id)
-    const noteToUpdate = noteDocument.notes.find((note) => note._id === noteId);
+    console.log(noteDocument);
+
+    const noteToUpdate = noteDocument.notes.find(
+      (note) => note._id.toString() === noteId
+    );
 
     if (!noteToUpdate) {
       throw new Error("Specific note not found in the notes array.");
     }
 
     // update the text
-    noteToUpdate.text = updatedText;
+    noteToUpdate.text = text;
 
     // and save it
     await noteDocument.save();
 
     return {
       message: "Note updated successfully.",
-      updatedNote: { _id: noteId, text: updatedText },
+      updatedNote: { _id: noteId, text: text },
     };
   } catch (error) {
     throw new Error("Failed to update note: " + error.message);

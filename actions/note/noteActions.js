@@ -148,3 +148,38 @@ export const deleteNoteAction = async (id, noteId, videoId) => {
     return { success: false, message: error.message };
   }
 };
+
+export const editNoteAction = async (id, noteId, videoId, text) => {
+  try {
+    const loggedUser = await getLoggedInUser();
+
+    // Check if the user is authenticated
+    if (!loggedUser || !loggedUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    const userId = loggedUser._id;
+
+    const payload = { id, userId, noteId, text };
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/note`;
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update the note.");
+    }
+
+    revalidateTag?.(`note-${videoId}`);
+
+    return await response.json();
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
