@@ -1,13 +1,11 @@
 import { getPlaylistsAction } from "@/actions/playlistActions/playlistActions";
 import { CustomError } from "@/components/Error";
-import PlaylistCardSkeleton from "@/components/PlaylistCardSkeleton";
 import { fetchWithRetry } from "@/utils/retry";
-import { Suspense } from "react";
-import PlaylistCard from "../../components/PlaylistCard";
+import PlaylistContainer from "../../components/PlaylistContainer";
 import UnauthorizedHome from "../../components/unauthorizedHome";
 import CustomPagination from "./CustomPaginaiton";
 
-const PlaylistsContainer = async ({ searchParams = {} }) => {
+const ContentContainer = async ({ searchParams = {} }) => {
   const { playlists, totalCount } = await fetchWithRetry(() =>
     getPlaylistsAction(searchParams)
   );
@@ -22,13 +20,7 @@ const PlaylistsContainer = async ({ searchParams = {} }) => {
 
   return (
     <>
-      <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-        {playlists.map((item) => (
-          <Suspense fallback={<PlaylistCardSkeleton />} key={item._id}>
-            <PlaylistCard playlistId={item.playlist_id} />
-          </Suspense>
-        ))}
-      </div>
+      <PlaylistContainer playlists={playlists} />
       <CustomPagination
         redirectBaseUrl={"/playlists"}
         totalCount={totalCount}
@@ -37,4 +29,4 @@ const PlaylistsContainer = async ({ searchParams = {} }) => {
   );
 };
 
-export default PlaylistsContainer;
+export default ContentContainer;

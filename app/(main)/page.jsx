@@ -34,7 +34,7 @@ const HomePage = async () => {
             <div>{/* <SearchInput redirectBaseUrl={"/playlists"} /> */}</div>
           </div>
         </div>
-        <PlaylistContainer playlists={playlists} />
+        <PlaylistContainer playlists={playlists} browseAll={true} />
       </div>
     </div>
   );

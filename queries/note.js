@@ -48,7 +48,7 @@ export const getNotes = async (userId, videoId) => {
     const noteDocument = await Note.findOne({
       user: userId,
       video_id: videoId,
-    });
+    }).lean();
 
     if (!noteDocument) {
       return {
@@ -78,7 +78,7 @@ export const updateNote = async (id, userId, noteId, text) => {
     }
 
     // find note
-    const noteDocument = await Note.findById(id);
+    const noteDocument = await Note.findById(id).lean();
 
     if (!noteDocument) {
       throw new Error("Note document not found.");
@@ -126,7 +126,7 @@ export const deleteNote = async (id, userId, noteId) => {
     }
 
     // Fetch the note document
-    const noteDocument = await Note.findById(id);
+    const noteDocument = await Note.findById(id).lean();
 
     if (!noteDocument) {
       throw new Error("Note document not found.");

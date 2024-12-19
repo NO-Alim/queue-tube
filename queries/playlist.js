@@ -47,7 +47,7 @@ export const getPlaylistByUserId = async (
 export const getSinglePlaylist = async ({ userId, playlistId }) => {
   try {
     const query = { user: userId, playlist_id: playlistId };
-    const playlist = await Playlist.find(query);
+    const playlist = await Playlist.find(query).lean();
     return playlist;
   } catch (error) {
     throw new Error(error);
@@ -75,7 +75,7 @@ export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
     const playlist = await Playlist.findOne({
       user: userId,
       playlist_id: playlistId,
-    });
+    }).lean();
 
     if (!playlist) {
       throw new Error("Playlist not found.");
@@ -116,7 +116,7 @@ export const deletePlaylist = async (playlistId, userId) => {
     const playlist = await Playlist.findOne({
       playlist_id: playlistId,
       user: userId,
-    });
+    }).lean();
 
     if (!playlist) {
       throw new Error(
