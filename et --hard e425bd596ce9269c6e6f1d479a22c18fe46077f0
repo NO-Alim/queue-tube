@@ -1,0 +1,227 @@
+[33mcommit e425bd596ce9269c6e6f1d479a22c18fe46077f0[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m, [m[1;31mvercel/dev[m[33m)[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Thu Dec 19 18:45:04 2024 +0600
+
+    convert PlaylistContainer reuseable and use Promise.all for fetch playlist data because of connection close issue to fetch playslit data individually
+
+[33mcommit 45c84a9f4a191a654ea5536e2562dea7b8f02567[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Sat Dec 14 01:00:05 2024 +0600
+
+    error, loading, not-found page are added.
+
+[33mcommit 8091c16e9f19614c507508baf6dc15017a0d0b69[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Dec 13 23:27:43 2024 +0600
+
+    note edit & delete features added.
+
+[33mcommit 8b9825d31f267d7fc8dab4c02f562beaee7f7c0a[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Thu Dec 12 01:41:46 2024 +0600
+
+    note delete implemented
+
+[33mcommit c2aadf6dc4b699359ab543ffa32536c25e7bc49b[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Dec 11 00:58:20 2024 +0600
+
+    delete playlist 504 error soluation
+
+[33mcommit 1fdee23ee9ba7f19b5788677173670466111f811[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Dec 11 00:50:57 2024 +0600
+
+    playlist Delete button added
+
+[33mcommit bf47141de8a5d3c47a362941d00da7fecb481aac[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Dec 10 23:17:37 2024 +0600
+
+    player path added insted of player inside playlist path, mongodb connection function change for 504 status code
+
+[33mcommit 207c94521054eb29f808529a6894897df7cdbbc2[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Sun Dec 8 13:03:25 2024 +0600
+
+    player page convert to tab, implement fetchRetry
+
+[33mcommit b75e4b9c8f91b3605a0db40b6de01cb0321cbf08[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Dec 4 16:00:49 2024 +0600
+
+    dev to production
+
+[33mcommit 51d2642d35057166ef278ccfce86b2247e93dd8a[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Dec 4 15:54:54 2024 +0600
+
+    development error
+
+[33mcommit c8f07b2fc69bfcf3f05ae0ec878fa0a877eaf09e[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Dec 4 15:48:55 2024 +0600
+
+    note feature implemented
+
+[33mcommit 2951c4a5241cedb99d9ce74209e1ece316029b5d[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Sun Dec 1 21:18:55 2024 +0600
+
+    modal updated & video completed updated
+
+[33mcommit 90a42b9945d1d1e336f6d7b8233a6980ef8c0bcf[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Nov 29 20:54:01 2024 +0600
+
+    url Dev mode to production mode
+
+[33mcommit 13ea54609a79865c1e7b7681e5817b6ffb06c307[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Nov 29 20:48:37 2024 +0600
+
+    complete history and watch history implemented done
+
+[33mcommit 38a62a7d0d0e5a75fd44307ee979ebd16e8b9d61[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Nov 26 20:56:30 2024 +0600
+
+    playlist tracker(history video and comploeted viddeo) updated
+
+[33mcommit 6cd406d460897463d1db3e579b9025257c3deee7[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Nov 5 11:26:36 2024 +0600
+
+    playlist page done
+
+[33mcommit dad33266f64764aca7e9bce4eace4abe63061697[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Nov 1 01:09:56 2024 +0600
+
+    init
+
+[33mcommit 086b8bfe421848945c95458eabe3ea4528a5f33e[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Thu Oct 31 01:36:50 2024 +0600
+
+    playlist page done, serach remove because of structure of database and youtube datas are changeable
+
+[33mcommit 3b53307823673c40a19cf77097131358b70a9248[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 23:52:58 2024 +0600
+
+    production mode
+
+[33mcommit 7a09b6e521429c8dd0227e04188b26abdda75bf3[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 23:51:00 2024 +0600
+
+    middleware change for api route
+
+[33mcommit 004bfd375680378d7c198d4378eb99d1111bde6b[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 22:41:04 2024 +0600
+
+    middleware added
+
+[33mcommit 71134ea2e289afe476b3d42a202e30732773c7d5[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 16:13:10 2024 +0600
+
+    duplicate playlist_id error solved
+
+[33mcommit 306160500be7298c4febcf47dc5b6f4d0f0a643f[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 15:44:04 2024 +0600
+
+    playlist model change
+
+[33mcommit bc5cff56d43c70553dc5c1906215ba1f954d70b2[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 14:02:37 2024 +0600
+
+    url error solved
+
+[33mcommit 91d70775b3f5e78b53209e2f6dc0e23999d2c5ce[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Tue Oct 29 13:47:55 2024 +0600
+
+    home page okey for dev mode
+
+[33mcommit 20171f43b25e122ca65f2105bc0af6ba1517e901[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Sun Oct 27 14:24:11 2024 +0600
+
+    convert action to api
+
+[33mcommit 8a343374092bd6663fb2c6d63eba86d1bc55406e[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Sat Oct 26 13:57:32 2024 +0600
+
+    error solved
+
+[33mcommit 997a54ce0fc2866132a6c700c8cdc1b0f54169bd[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Oct 25 10:07:06 2024 +0600
+
+    test
+
+[33mcommit 313c38edda4473a44e7a5d0310b151a46e8e60ac[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Oct 25 10:03:28 2024 +0600
+
+    test
+
+[33mcommit b20c39898ea184a558c4718c856bbdb48e550bec[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Oct 25 09:47:28 2024 +0600
+
+    test
+
+[33mcommit 1a000883972e7bdeabf17f9a4de06e69befed95d[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Fri Oct 25 09:38:19 2024 +0600
+
+    nothing new for testing perpous
+
+[33mcommit 585bb0a7c338731e10f1ba74e63cf8655bfcccb4[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Thu Oct 24 19:11:08 2024 +0600
+
+    playlist container done
+
+[33mcommit 1e7bb52f1318736c6a716f7c6f0aea208764ef03[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Thu Oct 24 14:26:23 2024 +0600
+
+    perv issue
+
+[33mcommit 22b28ed6ddd5a46385a53884ab665f916f45d998[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Thu Oct 24 09:49:06 2024 +0600
+
+    previous production error which is not showing in dev mode
+
+[33mcommit 2170ddb3dc7b47af5d8da526b854ac517555fbed[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Oct 23 17:12:38 2024 +0600
+
+    previous error
+
+[33mcommit f18ab7ac07d128ba9812ec9f33308658f41bc074[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Oct 23 16:55:17 2024 +0600
+
+    production issu
+
+[33mcommit dbf6f238567e7856fca846b1ed048773bece9c0c[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Oct 23 12:51:01 2024 +0600
+
+    mongoAdaptar
+
+[33mcommit 530816092719df88d822601fad5510f9999c086e[m
+Author: unknown <abdulalimrakib53@gmail.com>
+Date:   Wed Oct 23 12:00:17 2024 +0600
+
+    registerform update loading and field validation added

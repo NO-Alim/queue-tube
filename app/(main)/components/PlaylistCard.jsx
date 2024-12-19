@@ -1,24 +1,40 @@
+import {
+  getPlaylistData,
+  getPlaylistDetails,
+} from "@/actions/playlistActions/playlistActions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { fetchWithRetry } from "@/utils/retry";
 import { truncateDescription } from "@/utils/truncate";
 import { PlayCircle, VideoIcon, ViewIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import PlaylistDeleteButton from "./PlaylistDeleteButton";
 
-const PlaylistCard = ({ playlistDetails, playlistData }) => {
-  if (!playlistDetails) {
-    return null;
-  }
+const PlaylistCard = async ({ playlistId }) => {
+  const playlistDetails = await fetchWithRetry(() =>
+    getPlaylistDetails(playlistId)
+  );
+  const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
 
-  const { id, title, description, thumbnails, itemCount } =
-    playlistDetails || {};
-  const mediumThumbnail = thumbnails?.medium || {};
+  if (!playlistDetails) return null;
 
   const currentPlaylist =
     Array.isArray(playlistData) && playlistData.length > 0
-      ? playlistData[0]
+      ? playlistData.find((playlist) => playlist.playlist_id === playlistId)
       : null;
+
+  const {
+    id,
+    title,
+    description,
+    publishedAt,
+    thumbnails,
+    channelId,
+    channelTitle,
+    itemCount,
+  } = playlistDetails || {};
+  const mediumThumbnail = thumbnails.medium;
 
   return (
     <div className="group space-y-2 hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
@@ -27,25 +43,24 @@ const PlaylistCard = ({ playlistDetails, playlistData }) => {
           <div className="relative w-full aspect-video rounded-md overflow-hidden">
             <Image
               src={mediumThumbnail.url}
-              alt={title || "Playlist Thumbnail"}
+              alt={title}
               className="object-cover"
               fill
             />
           </div>
           <div className="flex flex-col pt-2 space-y-2">
             <div className="text-lg md:text-base font-medium group-hover:text-red-500 line-clamp-2">
-              {title || "Untitled Playlist"}
+              {title}
             </div>
             <p className="text-xs text-muted-foreground">
-              {truncateDescription(
-                description || "No description available",
-                20
-              )}
+              {truncateDescription(description, 20)}
             </p>
             <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
               <div className="flex items-center gap-x-1 text-slate-500">
-                <VideoIcon className="w-4" />
-                <span>{itemCount || 0} Videos</span>
+                <div>
+                  <VideoIcon className="w-4" />
+                </div>
+                <span>{itemCount} Videos</span>
               </div>
             </div>
           </div>
@@ -75,7 +90,7 @@ const PlaylistCard = ({ playlistDetails, playlistData }) => {
             <span>View Playlist</span>
           </Link>
         )}
-        <PlaylistDeleteButton playlistId={id} />
+        <PlaylistDeleteButton playlistId={playlistId} />
       </div>
     </div>
   );
