@@ -10,13 +10,11 @@ const ContentContainer = async ({ searchParams = {} }) => {
     getPlaylistsAction(searchParams)
   );
 
-  console.log(playlists);
-
   if (playlists?.error) {
     return <CustomError message={playlists.error} />;
   }
 
-  if (playlists?.length === 0) {
+  if (!playlists || playlists?.length === 0) {
     return <UnauthorizedHome authorizedHome={true} />;
   }
 
