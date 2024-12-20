@@ -46,6 +46,7 @@ export const getPlaylistByUserId = async (
 
 export const getSinglePlaylist = async ({ userId, playlistId }) => {
   try {
+    await dbConnect();
     const query = { user: userId, playlist_id: playlistId };
     const playlist = await Playlist.find(query).lean();
     return playlist;

@@ -15,8 +15,7 @@ const PlaylistCard = async ({ playlistId }) => {
   const playlistDetails = await fetchWithRetry(() =>
     getPlaylistDetails(playlistId)
   );
-  const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
-
+  const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId)); // 504 Error from this line.
   if (!playlistDetails) return null;
 
   const currentPlaylist =
