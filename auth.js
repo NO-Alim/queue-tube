@@ -6,6 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { authConfig } from "./auth.config";
 import { User } from "./model/user_model";
 import mongoClientPromise from "./queries/mongoClientPromise";
+import { dbConnect } from "./service/mongo";
 
 async function refreshAccessToken(token) {}
 
@@ -23,6 +24,7 @@ export const {
         if (credentials == null) return null;
 
         try {
+          await dbConnect();
           const user = await User.findOne({
             email: credentials?.email,
           });
