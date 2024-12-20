@@ -14,9 +14,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 const CustomPagination = ({
   totalCount,
   redirectBaseUrl,
-  limit = process.env.NEXT_PUBLIC_TOTAL_COUNT,
+  limit = parseInt(process.env.NEXT_PUBLIC_TOTAL_COUNT, 10) || 10,
 }) => {
-  const totalPages = Math.ceil(totalCount / limit);
+  const totalPages = Math.max(1, Math.ceil((totalCount || 0) / limit));
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -27,6 +27,8 @@ const CustomPagination = ({
     const url = `${redirectBaseUrl || pathname}?page=${page}`;
     push(url);
   };
+
+  if (totalPages < 1) return null; // No pages to render
 
   return (
     <Pagination>
@@ -39,7 +41,7 @@ const CustomPagination = ({
           />
         </PaginationItem>
 
-        {[...Array(totalPages)].map((_, index) => {
+        {Array.from({ length: totalPages }, (_, index) => {
           const page = index + 1;
           if (
             page === 1 ||
