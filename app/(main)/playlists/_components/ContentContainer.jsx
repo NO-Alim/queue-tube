@@ -10,6 +10,8 @@ const ContentContainer = async ({ searchParams = {} }) => {
     getPlaylistsAction(searchParams)
   );
 
+  console.log(playlists);
+
   if (playlists?.error) {
     return <CustomError message={playlists.error} />;
   }
