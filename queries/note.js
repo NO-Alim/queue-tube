@@ -125,7 +125,7 @@ export const deleteNote = async (id, userId, noteId) => {
     }
 
     // Fetch the note document
-    const noteDocument = await Note.findById(id).lean();
+    const noteDocument = await Note.findById(id);
 
     if (!noteDocument) {
       throw new Error("Note document not found.");
