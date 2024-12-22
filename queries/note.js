@@ -78,7 +78,7 @@ export const updateNote = async (id, userId, noteId, text) => {
     }
 
     // find note
-    const noteDocument = await Note.findById(id).lean();
+    const noteDocument = await Note.findById(id);
 
     if (!noteDocument) {
       throw new Error("Note document not found.");
@@ -91,7 +91,6 @@ export const updateNote = async (id, userId, noteId, text) => {
     }
 
     // Find the specific note in the notes array by noteId( arrays note id)
-    console.log(noteDocument);
 
     const noteToUpdate = noteDocument.notes.find(
       (note) => note._id.toString() === noteId
