@@ -76,7 +76,7 @@ export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
     const playlist = await Playlist.findOne({
       user: userId,
       playlist_id: playlistId,
-    }).lean();
+    });
 
     if (!playlist) {
       throw new Error("Playlist not found.");
@@ -106,6 +106,8 @@ export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
       updatedPlaylist: playlist,
     };
   } catch (error) {
+    console.log(error);
+
     throw new Error(error.message || "Failed to update the playlist.");
   }
 };

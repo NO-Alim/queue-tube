@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { getLoggedInUser } from "@/lib/loggedInUser";
 import { checkPlaylistExist } from "@/queries/playlist";
+import { dbConnect } from "@/service/mongo";
 import filterIdFromLink from "@/utils/filterIdFromLink";
 import { revalidateTag } from "next/cache";
 
@@ -60,6 +61,7 @@ export const getPlaylistDetails = async (playlistIdOrLink) => {
 
 export const addPlaylistAction = async (playlistId) => {
   try {
+    await dbConnect();
     const loggedInUser = await getLoggedInUser();
     if (!loggedInUser._id) {
       throw new Error("You are not authenticated.");
@@ -101,6 +103,7 @@ export const addPlaylistAction = async (playlistId) => {
 // get user playlist
 export const getPlaylistsAction = async (searchParams = {}) => {
   try {
+    await dbConnect();
     const loggedInUser = await getLoggedInUser();
     if (!loggedInUser._id) {
       throw new Error("You are not authenticated.");
@@ -139,6 +142,7 @@ export const getPlaylistsAction = async (searchParams = {}) => {
 // this details from local server, and it contain playlist history data and completed Playlist array.
 export const getPlaylistData = async (playlistId) => {
   try {
+    await dbConnect();
     const loggedInUser = await getLoggedInUser();
     if (!loggedInUser._id) {
       throw new Error("You are not authenticated.");
@@ -170,6 +174,7 @@ export const getPlaylistData = async (playlistId) => {
 
 export const updatePlaylistAction = async (playlistId, data) => {
   try {
+    await dbConnect();
     // Validate playlistId
     if (!playlistId) {
       throw new Error(
@@ -196,7 +201,7 @@ export const updatePlaylistAction = async (playlistId, data) => {
       userId,
     };
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local/${playlistId}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_DEV}/api/playlist/local/${playlistId}`;
     const response = await fetch(url, {
       method: "PATCH",
       headers: {
@@ -220,6 +225,7 @@ export const updatePlaylistAction = async (playlistId, data) => {
 
 export const deletePlaylistAction = async (playlistId) => {
   try {
+    await dbConnect();
     // Validate playlistId
     if (!playlistId) {
       throw new Error(

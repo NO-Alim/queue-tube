@@ -31,9 +31,7 @@ const Player = ({ playlistId, videoId }) => {
         const seconds = convertToSeconds(currentPlaylist.watch_history);
         setVideoStartFrom(seconds);
       }
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
