@@ -34,7 +34,7 @@ const AddPlaylistCard = ({
     try {
       const response = await addPlaylistAction(id);
       if (response?.error) {
-        toast.error(response.error?.message || "Failed to add playlist.");
+        toast.error(response.error || "Failed to add playlist.");
       } else {
         toast.success("Playlist added Successfully.");
       }

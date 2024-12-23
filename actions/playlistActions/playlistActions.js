@@ -5,6 +5,7 @@ import { getLoggedInUser } from "@/lib/loggedInUser";
 import { checkPlaylistExist } from "@/queries/playlist";
 import { dbConnect } from "@/service/mongo";
 import filterIdFromLink from "@/utils/filterIdFromLink";
+import { fetchWithRetry } from "@/utils/retry";
 import { revalidateTag } from "next/cache";
 
 // form youtube api
@@ -59,47 +60,6 @@ export const getPlaylistDetails = async (playlistIdOrLink) => {
   }
 };
 
-export const addPlaylistAction = async (playlistId) => {
-  try {
-    await dbConnect();
-    const loggedInUser = await getLoggedInUser();
-    if (!loggedInUser._id) {
-      throw new Error("You are not authenticated.");
-    }
-    //check playlist id valid or not
-    // if in valid error will throw getPlaylistDetails function
-    const playlistDetails = await getPlaylistDetails(playlistId);
-    //fetch
-    const userId = loggedInUser._id;
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
-
-    const dataToSave = {
-      playlistId,
-      userId,
-    };
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataToSave),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to add playlist.");
-    }
-
-    revalidateTag("user-playlists");
-    return;
-  } catch (error) {
-    return {
-      error: error.message,
-    };
-  }
-};
-
 // get user playlist
 export const getPlaylistsAction = async (searchParams = {}) => {
   try {
@@ -132,6 +92,74 @@ export const getPlaylistsAction = async (searchParams = {}) => {
     }
 
     return await response.json();
+  } catch (error) {
+    return {
+      error: error.message,
+    };
+  }
+};
+
+export const checkPlaylistLimitExceeded = async () => {
+  try {
+    // Fetch the total number of playlists
+    const { totalCount } = await fetchWithRetry(() => getPlaylistsAction());
+
+    // Check if the playlist limit is exceeded
+    const limitExceeded = totalCount >= process.env.NEXT_PUBLIC_PLAYLIST_LIMIT;
+
+    // Return the result
+    return { limitExceeded: limitExceeded };
+  } catch (error) {
+    // Return the error if something goes wrong
+    return { error: error.message };
+  }
+};
+
+export const addPlaylistAction = async (playlistId) => {
+  try {
+    await dbConnect();
+    const loggedInUser = await getLoggedInUser();
+    if (!loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    const { limitExceeded, error } = await checkPlaylistLimitExceeded();
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    if (limitExceeded) {
+      throw new Error("You have reached the maximum playlist limit.");
+    }
+
+    //check playlist id valid or not
+    // if in valid error will throw getPlaylistDetails function
+    const playlistDetails = await getPlaylistDetails(playlistId);
+    //fetch
+    const userId = loggedInUser._id;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_PRODUCTION}/api/playlist/local`;
+
+    const dataToSave = {
+      playlistId,
+      userId,
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSave),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to add playlist.");
+    }
+
+    revalidateTag("user-playlists");
+    return;
   } catch (error) {
     return {
       error: error.message,

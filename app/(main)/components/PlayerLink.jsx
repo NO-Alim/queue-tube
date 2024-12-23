@@ -29,7 +29,7 @@ const PlayerLink = ({ playlistId }) => {
     <>
       {playlistData?.history_video_id ? (
         <Link
-          href={`/playlists/${playlistId}/${playlistData.history_video_id}`}
+          href={`/player/${playlistId}/${playlistData.history_video_id}`}
           className={cn(
             buttonVariants({ size: "sm", variant: "destructive" }),
             "flex items-center font-semibold"

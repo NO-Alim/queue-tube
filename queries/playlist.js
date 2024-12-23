@@ -106,8 +106,6 @@ export const updatePlaylistData = async (playlistId, userId, dataToUpdate) => {
       updatedPlaylist: playlist,
     };
   } catch (error) {
-    console.log(error);
-
     throw new Error(error.message || "Failed to update the playlist.");
   }
 };
