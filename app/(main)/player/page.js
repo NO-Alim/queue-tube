@@ -1,7 +1,7 @@
+import { CustomError } from "@/components/Error";
+
 const PlayerMainPage = () => {
-  // when there is no playlistId and videoId
-  throw new Error("Playlist Id and Video Id missing in URL.");
-  return null;
+  return <CustomError message="Playlist Id and Video Id missing in URL" />;
 };
 
 export default PlayerMainPage;

@@ -1,5 +1,9 @@
-import { getPlaylistDetails } from "@/actions/playlistActions/playlistActions";
+import {
+  getPlaylistDetails,
+  verifyPlaylist,
+} from "@/actions/playlistActions/playlistActions";
 import { getVideos } from "@/actions/videos/videoAction";
+import { CustomError } from "@/components/Error";
 import { fetchWithRetry } from "@/utils/retry";
 import ButtonContainer from "./ButtonContainer";
 import PlaylistThumbnailInfo from "./PlaylistThumbnailInfo";
@@ -11,7 +15,22 @@ const PlaylistsContentContainer = async ({
   videoCompleted,
 }) => {
   const { pageToken = "" } = searchParams || {};
+
+  const isValidPlaylist = await verifyPlaylist(playlistId);
+
+  if (isValidPlaylist.error) {
+    return <CustomError message={isValidPlaylist.error} />;
+  }
+
+  if (!isValidPlaylist) {
+    return <CustomError message="Playlist Id or Video Id isn't valid." />;
+  }
+
   const playlistDetails = await fetchWithRetry(() => getPlaylistDetails(id));
+  if (playlistDetails?.error) {
+    return <CustomError message={playlistDetails.error} />;
+  }
+
   const videos = await fetchWithRetry(() =>
     getVideos({ playlistId: id, pageToken: pageToken })
   );

@@ -38,7 +38,7 @@ const NoteContainer = async ({ playlistId, videoId }) => {
       <TabsContent value="description">
         <p className="text-gray-500">
           {" "}
-          Right Now Description Feature is Disabled.
+          This feature is only for premium users.
         </p>
       </TabsContent>
     </Tabs>

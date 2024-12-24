@@ -12,18 +12,8 @@ import { revalidateTag } from "next/cache";
 export const getPlaylistDetails = async (playlistIdOrLink) => {
   try {
     const playlistId = filterIdFromLink(playlistIdOrLink);
-    // for check playlist exist or not
-    const session = await auth();
-    const loggedInUser = await getLoggedInUser();
 
-    if (!loggedInUser._id) {
-      throw new Error("You are not authenticated.");
-    }
-
-    const playlistAlreadyExist = await checkPlaylistExist(
-      playlistId,
-      loggedInUser._id
-    );
+    const playlistAlreadyExist = await verifyPlaylist(playlistId);
 
     const response = await fetch(
       `${process.env.YOUTUBE_API}/playlists?part=snippet,contentDetails&id=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
@@ -289,6 +279,26 @@ export const deletePlaylistAction = async (playlistId) => {
     revalidateTag?.(`user-playlists`);
 
     return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+
+export const verifyPlaylist = async (playlistId) => {
+  try {
+    const session = await auth();
+    const loggedInUser = await getLoggedInUser();
+
+    if (!loggedInUser._id) {
+      throw new Error("You are not authenticated.");
+    }
+
+    const playlistExist = await checkPlaylistExist(
+      playlistId,
+      loggedInUser._id
+    );
+
+    return playlistExist;
   } catch (error) {
     return { error: error.message };
   }
