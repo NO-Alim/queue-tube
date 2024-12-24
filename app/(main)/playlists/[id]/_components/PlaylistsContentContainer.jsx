@@ -16,7 +16,7 @@ const PlaylistsContentContainer = async ({
 }) => {
   const { pageToken = "" } = searchParams || {};
 
-  const isValidPlaylist = await verifyPlaylist(playlistId);
+  const isValidPlaylist = await verifyPlaylist(id);
 
   if (isValidPlaylist.error) {
     return <CustomError message={isValidPlaylist.error} />;
