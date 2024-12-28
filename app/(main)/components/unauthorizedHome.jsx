@@ -9,7 +9,7 @@ const UnauthorizedHome = ({ authorizedHome = false }) => {
   return (
     <div className="container flex flex-col gap-16 py-5">
       <div className=" w-full grid md:grid-cols-2 gap-5">
-        <div className=" space-y-5 h-full flex flex-col justify-center">
+        <div className=" space-y-5 h-full flex flex-col justify-center lg:py-10">
           <h1 className=" text-6xl">Save, Watch, Learn, and Excel!</h1>
           <p className=" text-primary/50 text-lg">
             Queue Tube lets you efficiently manage and track your favorite video
@@ -34,7 +34,7 @@ const UnauthorizedHome = ({ authorizedHome = false }) => {
             )}
           </div>
         </div>
-        <div className=" h-[400px]"></div>
+        <div className="h-[400px] hidden">{/* thumbnail for home page */}</div>
       </div>
       <div className=" w-full border border-gray-600/50 rounded-md p-4 bg-primary/5 grid md:grid-cols-2 gap-5 ">
         <FAQs />

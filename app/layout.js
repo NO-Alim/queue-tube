@@ -16,9 +16,9 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "Queue Tube",
+  title: "Queue Tube - Effortless Playlist Management",
   description:
-    "Queue Tube is a simple yet powerful app that lets you save youTube videos and playlists to watch later. Easily organize your favorite content, create custom playlists, and access everything in one place whenever you want. Whether you are building a personal video library, managing playlists, or just want a clean, organized way to keep track of YouTube videos.",
+    "Queue Tube lets you organize, watch, and take notes on your favorite video playlists distraction-free. Add up to 20 playlists, set favorites, and track videos smarter.",
 };
 
 export default async function RootLayout({ children }) {

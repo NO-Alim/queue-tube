@@ -1,9 +1,41 @@
 import {
   getPlaylistData,
+  getPlaylistDetails,
   getPlaylistsAction,
 } from "@/actions/playlistActions/playlistActions";
 import { VideoProvider } from "@/provider/VideoContext";
 import { fetchWithRetry } from "@/utils/retry";
+
+export async function generateMetadata({ params: { playlistId } }) {
+  try {
+    // Fetch playlist details
+    const playlistDetails = await fetchWithRetry(() =>
+      getPlaylistDetails(playlistId)
+    );
+    const { title, description, thumbnails } = playlistDetails || {};
+
+    // Return metadata
+    return {
+      title: title ? `Queue Tube - Player: ${title}` : "Queue Tube - Player",
+      description:
+        description ||
+        "Explore this Video and enjoy distraction-free watching and note-taking.",
+      openGraph: {
+        images: thumbnails?.high?.url ? [thumbnails.high.url] : [],
+        title: title || "Queue Tube - Player",
+        description:
+          description ||
+          "Organize and watch your videos seamlessly with Queue Tube.",
+      },
+    };
+  } catch (error) {
+    // Fallback metadata
+    return {
+      title: "Queue Tube - Player",
+      description: "Explore this Video and manage effortlessly.",
+    };
+  }
+}
 
 const PlayerLandingPage = async ({ children, params: { playlistId } }) => {
   const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
