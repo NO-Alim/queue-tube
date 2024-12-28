@@ -19,6 +19,12 @@ export const metadata = {
   title: "Queue Tube - Effortless Playlist Management",
   description:
     "Queue Tube lets you organize, watch, and take notes on your favorite video playlists distraction-free. Add up to 20 playlists, set favorites, and track videos smarter.",
+  openGraph: {
+    images: ["/assets/thumbnail.jpg"],
+    title: "Queue Tube - Effortless Playlist Management",
+    description:
+      "Queue Tube lets you organize, watch, and take notes on your favorite video playlists distraction-free. Add up to 20 playlists, set favorites, and track videos smarter.",
+  },
 };
 
 export default async function RootLayout({ children }) {
@@ -35,7 +41,6 @@ export default async function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <SessionProvider>{children}</SessionProvider>
-
           <Toaster richColors position="top-center" />
         </ThemeProvider>
       </body>
