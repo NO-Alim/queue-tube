@@ -8,7 +8,7 @@ const VideoCard = async ({ video, playlistId, currentPlaylist }) => {
   const {
     snippet: {
       title,
-      thumbnails: { medium },
+      thumbnails,
       description,
       publishedAt,
       channelTitle,
@@ -16,6 +16,18 @@ const VideoCard = async ({ video, playlistId, currentPlaylist }) => {
     },
     contentDetails: { videoPublishedAt },
   } = video;
+
+  const isPrivate =
+    title === "Private video" && description === "This video is private.";
+
+  if (isPrivate) {
+    return null;
+  }
+  const mediumThumbnail =
+    thumbnails?.medium?.url ||
+    thumbnails?.default?.url ||
+    thumbnails?.high?.url ||
+    "";
 
   const isCompleted =
     (currentPlaylist?.video_completed &&
@@ -29,7 +41,12 @@ const VideoCard = async ({ video, playlistId, currentPlaylist }) => {
         className=" space-y-3 flex flex-col justify-between h-full"
       >
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
-          <Image src={medium.url} alt={title} className="object-cover" fill />
+          <Image
+            src={mediumThumbnail}
+            alt={title || "Video thumbnail"}
+            className="object-cover"
+            fill
+          />
           <span className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded">
             {new Date(videoPublishedAt).toLocaleDateString()}
           </span>

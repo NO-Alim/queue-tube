@@ -20,12 +20,14 @@ const VideoList = async ({
   return (
     <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
       {videos.map((video, index) => (
-        <VideoCard
-          key={video.id}
-          video={video}
-          playlistId={playlistId}
-          currentPlaylist={currentPlaylist}
-        />
+        <div key={video.id}>
+          <VideoCard
+            key={video.id}
+            video={video}
+            playlistId={playlistId}
+            currentPlaylist={currentPlaylist}
+          />
+        </div>
       ))}
     </div>
   );
