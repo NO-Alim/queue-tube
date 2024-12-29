@@ -39,7 +39,7 @@ const UnauthorizedHome = ({ authorizedHome = false }) => {
       <div className=" w-full border border-gray-600/50 rounded-md p-4 bg-primary/5 grid md:grid-cols-2 gap-5 ">
         <FAQs />
         <div>
-          <VideoPlayer url="https://www.youtube.com/watch?v=UB1O30fR-EE" />
+          <VideoPlayer url="https://www.youtube.com/embed/UB1O30fR-EE?si=i7NqsnDATWpkasAF" />
         </div>
       </div>
     </div>

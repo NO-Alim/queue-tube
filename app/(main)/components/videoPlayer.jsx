@@ -3,7 +3,7 @@ const VideoPlayer = ({ url }) => {
     <div className="relative aspect-video">
       <iframe
         className="w-full h-full"
-        src="https://www.youtube.com/embed/-mEC57qp5fQ?si=C919BHJ2iCT3K7Ug"
+        src={url}
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
