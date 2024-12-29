@@ -12,11 +12,11 @@ const UnauthorizedHome = ({ authorizedHome = false }) => {
         <div className=" space-y-5 h-full flex flex-col justify-center lg:py-10">
           <h1 className=" text-6xl">Save, Watch, Learn, and Excel!</h1>
           <p className=" text-primary/50 text-lg">
-            Queue Tube lets you efficiently manage and track your favorite video
-            playlists. Add up to 20 playlists, watch without distractions, and
-            take notes with timestamps for smarter learning. Organize your top 5
-            playlists as favorites, and share playlists or videos with ease—all
-            within a streamlined interface.
+            Queue Tube lets you efficiently manage and track your favorite
+            Youtube video playlists. Add up to 20 playlists, watch without
+            distractions, and take notes with timestamps for smarter learning.
+            Organize your top 5 playlists as favorites, and share playlists or
+            videos with ease—all within a streamlined interface.
           </p>
           <div>
             {authorizedHome ? (
@@ -39,7 +39,7 @@ const UnauthorizedHome = ({ authorizedHome = false }) => {
       <div className=" w-full border border-gray-600/50 rounded-md p-4 bg-primary/5 grid md:grid-cols-2 gap-5 ">
         <FAQs />
         <div>
-          <VideoPlayer url="https://www.youtube.com/watch?v=fFPP5ees6Kw" />
+          <VideoPlayer url="https://www.youtube.com/watch?v=UB1O30fR-EE" />
         </div>
       </div>
     </div>

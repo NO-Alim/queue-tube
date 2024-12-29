@@ -10,7 +10,7 @@ const FAQs = () => {
     {
       question: "How many playlists can I add in Queue Tube?",
       answer:
-        "You can add up to 20 playlists to Queue Tube. Simply use the playlist ID or link to add them. You can also mark up to 5 of those playlists as favorites for quick access.",
+        "You can add up to 20 playlists to Queue Tube. Simply use the playlist ID or link to add them.",
     },
     {
       question: "Can I take notes while watching videos?",
@@ -20,17 +20,12 @@ const FAQs = () => {
     {
       question: "Can I share playlists or individual videos?",
       answer:
-        "Absolutely! All playlists and videos added to Queue Tube are shareable. You can easily share them with others directly from the app.",
+        "Absolutely! All playlists and videos added to Queue Tube are shareable. You can easily share them with others directly from the app, But This is not accessible for other user or random public.",
     },
     {
       question: "Can I watch videos without external suggestions or ads?",
       answer:
         "Yes, Queue Tube only shows the videos from your added playlists. You won’t get any external video suggestions or ads, ensuring a distraction-free viewing experience.",
-    },
-    {
-      question: "How does the favorite playlist feature work?",
-      answer:
-        "You can mark up to 5 of your added playlists as favorites. This allows you to quickly access your top playlists, so you don’t have to search through all 20 to find the ones you use most often.",
     },
   ];
 

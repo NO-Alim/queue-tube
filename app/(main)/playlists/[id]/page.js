@@ -18,7 +18,9 @@ export async function generateMetadata({ params: { id } }) {
         description ||
         "Explore this playlist and enjoy distraction-free watching and note-taking.",
       openGraph: {
-        images: thumbnails?.high?.url ? [thumbnails.high.url] : [],
+        images: thumbnails?.high?.url
+          ? [thumbnails.high.url]
+          : ["https://queue-tube.vercel.app/assets/thumbnail.jpg"],
         title: title || "Queue Tube - Playlist",
         description:
           description ||

@@ -16,6 +16,30 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
+
+// zod schema for password validation
+const registerSchema = z
+  .object({
+    firstName: z.string().nonempty("First name is required"),
+    lastName: z.string().nonempty("Last name is required"),
+    email: z.string().email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number")
+      .regex(
+        /[^a-zA-Z0-9]/,
+        "Password must contain at least one special character"
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export function RegisterForm() {
   const [loading, setLoading] = useState(false);
@@ -26,10 +50,29 @@ export function RegisterForm() {
     setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
+      const data = {
+        firstName: formData.get("first-name"),
+        lastName: formData.get("last-name"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+        confirmPassword: formData.get("confirmPassword"),
+      };
+
+      // validate form data useing zod
+      const validationResult = registerSchema.safeParse(data);
+      if (!validationResult.success) {
+        const errorMessages = validationResult.error.errors.map(
+          (err) => err.message
+        );
+        const combinedErrorMessage = errorMessages.join(", "); // Combine messages into one string
+        toast.error(combinedErrorMessage); // Display one toast with all error messages
+        return;
+      }
+
       const response = await singUpUser(formData);
 
       if (response.error) {
-        toast.error(response.error); // Display the error message
+        toast.error(response.error);
       } else {
         await loginUser(formData);
         toast.success(

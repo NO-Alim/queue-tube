@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="container py-2 w-full flex justify-between bg-primary/5">
+    <div className="container py-2 w-full flex flex-col md:flex-row justify-between bg-primary/5">
       <div className="flex justify-center space-x-6">
         <Link
           href="https://github.com/NO-Alim"
