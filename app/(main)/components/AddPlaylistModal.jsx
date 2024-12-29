@@ -101,7 +101,6 @@ export function AddPlaylistModal() {
               <DialogTitle className="text-center">Add Playlist</DialogTitle>
               <DialogDescription className="text-center">
                 To Add Playlist, Put Your Playlist link or Id.
-                PL_XxuZqN0xVD0op-QDEgyXFA4fRPChvkl
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit}>
