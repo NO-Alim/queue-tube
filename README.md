@@ -53,13 +53,13 @@ Clean YouTube (Queue-Tube) is a distraction-free web app for organizing and watc
      ```env
       MONGODB_CONNECTION_STRING=your_mongo_connection_string
       YOUTUBE_API_KEY=your_youtube_api_key
-      AUTH_SECRET  = your auth secret
-      JWT_SECRET = any secret text or number
-      NEXT_PUBLIC_BASE_URL_DEV= http://localhost:3000
-      NEXT_PUBLIC_BASE_URL_PRODUCTION = https://queue-tube.vercel.app
-      YOUTUBE_API= https://youtube.googleapis.com/youtube/v3
-      NEXT_PUBLIC_TOTAL_COUNT= Select a number how many playlist you want to fetch at time
-      NEXT_PUBLIC_PLAYLIST_LIMIT = Select a number how many playlist user can add
+      AUTH_SECRET=your auth secret
+      JWT_SECRET=any secret text or number
+      NEXT_PUBLIC_BASE_URL_DEV=http://localhost:3000
+      NEXT_PUBLIC_BASE_URL_PRODUCTION=https://queue-tube.vercel.app
+      YOUTUBE_API=https://youtube.googleapis.com/youtube/v3
+      NEXT_PUBLIC_TOTAL_COUNT=Select a number how many playlist you want to fetch at time
+      NEXT_PUBLIC_PLAYLIST_LIMIT=Select a number how many playlist user can add
      ```
 5. Start the development server:
    ```bash
