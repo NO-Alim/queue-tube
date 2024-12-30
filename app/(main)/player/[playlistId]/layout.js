@@ -1,8 +1,9 @@
 import {
   getPlaylistData,
   getPlaylistDetails,
-  getPlaylistsAction,
+  verifyPlaylist,
 } from "@/actions/playlistActions/playlistActions";
+import { CustomError } from "@/components/Error";
 import { VideoProvider } from "@/provider/VideoContext";
 import { fetchWithRetry } from "@/utils/retry";
 
@@ -39,11 +40,17 @@ export async function generateMetadata({ params: { playlistId } }) {
 
 const PlayerLandingPage = async ({ children, params: { playlistId } }) => {
   const playlistData = await fetchWithRetry(() => getPlaylistData(playlistId));
-  const { playlists } = await fetchWithRetry(() => getPlaylistsAction());
   // Ensure the playlist exists for the authenticated user
-  const exists = playlists.some((item) => item.playlist_id === playlistId);
-  if (!exists) {
-    throw new Error("You are not authorized to watch this video");
+  const playlistExist = await verifyPlaylist(playlistId);
+
+  if (!playlistExist) {
+    return (
+      <CustomError message="You are not authenticated to watch this playlist" />
+    );
+  }
+
+  if (playlistExist?.error) {
+    return <CustomError message={playlistExist.error} />;
   }
 
   const currentPlaylist =
