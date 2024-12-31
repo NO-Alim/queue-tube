@@ -27,19 +27,9 @@ export const metadata = {
     siteName: "queue-tube",
     images: [
       {
-        url: "https://queue-tube.vercel.app/logo_white.png",
-        width: 800,
-        height: 600,
-      },
-      {
-        url: "https://queue-tube.vercel.app/assets/thumbnail.jpg",
-        width: 1800,
-        height: 1600,
-      },
-      {
         url: "https://queue-tube.vercel.app/assets/thumbnail.jpg",
         width: 1200,
-        height: 600,
+        height: 630,
       },
     ],
     type: "website",
