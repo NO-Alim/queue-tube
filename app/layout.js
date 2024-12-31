@@ -19,9 +19,30 @@ export const metadata = {
   title: "Queue Tube - Effortless Playlist Management",
   description:
     "Queue Tube lets you organize, watch, and take notes on your favorite video playlists distraction-free. Add up to 20 playlists, set favorites, and track videos smarter.",
-
+  metadataBase: new URL("https://queue-tube.vercel.app/"),
   openGraph: {
-    images: ["/logo_white.png"],
+    title: "Queue Tube",
+    description: "Queue Tube - Effortless Playlist Management",
+    url: "https://queue-tube.vercel.app/",
+    siteName: "queue-tube",
+    images: [
+      {
+        url: "https://queue-tube.vercel.app/logo_white.png",
+        width: 800,
+        height: 600,
+      },
+      {
+        url: "https://queue-tube.vercel.app/assets/thumbnail.jpg",
+        width: 1800,
+        height: 1600,
+      },
+      {
+        url: "https://queue-tube.vercel.app/assets/thumbnail.jpg",
+        width: 1200,
+        height: 600,
+      },
+    ],
+    type: "website",
   },
 };
 
